@@ -130,18 +130,18 @@
 			},
 			"ResourceGroup": {
 				"type": "String",
-				"defaultValue": "DWCLOUD-Prod"
+				"defaultValue": "DWCLOUD-DEV"
 			},
 			"ServerName": {
 				"type": "String",
-				"defaultValue": "vusdwhasprod"
+				"defaultValue": "vusasdev"
 			}
 		},
 		"folder": {
 			"name": "AZURE AS"
 		},
 		"annotations": [],
-		"lastPublishTime": "2021-11-30T06:25:27Z"
+		"lastPublishTime": "2022-06-29T16:45:06Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

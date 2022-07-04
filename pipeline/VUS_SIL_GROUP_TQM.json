@@ -1,5 +1,5 @@
 {
-	"name": "VUS_SIL_GROUP_TQM 02",
+	"name": "VUS_SIL_GROUP_TQM",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlDWSource",
-						"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - TQM 02'",
+						"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - TQM'",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -133,6 +133,7 @@
 				}
 			}
 		],
+		"concurrency": 6,
 		"parameters": {
 			"BATCH_ID": {
 				"type": "string",
