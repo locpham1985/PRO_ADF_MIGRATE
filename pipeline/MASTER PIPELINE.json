@@ -12,7 +12,13 @@
 						"referenceName": "RESUME SYNAPSE",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+						"resourceGroups": "DWCLOUD-DEV",
+						"servers": "vus-synapse-ws",
+						"databases": "VUSDWHDEV"
+					}
 				}
 			},
 			{
