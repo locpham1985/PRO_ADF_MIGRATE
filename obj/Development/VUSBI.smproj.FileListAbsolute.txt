@@ -1,7 +1,0 @@
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\bin\Model.asdatabase
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\bin\Model.deploymenttargets
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\bin\Model.deploymentoptions
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\obj\Development\VUSBI.smproj.CoreCompileInputs.cache
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\obj\Development\Model.asdatabase
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\obj\Development\Model.deploymentoptions
-C:\Users\locpham\OneDrive - vus-etsc.edu.vn\Documents\GitHub\VUSBI\obj\Development\Model.deploymenttargets
