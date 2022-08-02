@@ -1,0 +1,301 @@
+{
+	"name": "Load ETL Job",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_36i",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "manual//ETL_JOB_with NOLOCK.xlsx"
+					},
+					{
+						"name": "Destination",
+						"value": "ADF.ETL_JOB_20220704"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowCopyCommand": true
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "LS_STORAGE_ACCOUNT_DEV",
+							"type": "LinkedServiceReference"
+						},
+						"path": "0010c22f-978a-4bc9-9e99-be47f784bf72"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "JOB_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_ID",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_NAME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_GROUP",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_SUB_GROUP",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_SUB_GROUP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_TYPE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_TYPE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SOURCE_SCHEMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOURCE_SCHEMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SOURCE_TABLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOURCE_TABLE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TARGET_SCHEMA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TARGET_SCHEMA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TARGET_TABLE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TARGET_TABLE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_SCRIPT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_SCRIPT",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PRUNE_DAYS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRUNE_DAYS",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "FULL_LOAD_FLG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FULL_LOAD_FLG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DATASOURCE_NUM_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DATASOURCE_NUM_ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "ACTIVE_FLG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ACTIVE_FLG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CREATED_TS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CREATED_TS",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "LAST_UPDATED_TS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LAST_UPDATED_TS",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "JOB_ORDER",
+									"type": "String"
+								},
+								"sink": {
+									"name": "JOB_ORDER",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"name": "INTEGRATION_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INTEGRATION_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "INTEGRATION_COL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INTEGRATION_COL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "INTEGRATION_ORDER_COL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INTEGRATION_ORDER_COL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "INCREMENTAL_COL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "INCREMENTAL_COL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "truncate_flag",
+									"type": "String"
+								},
+								"sink": {
+									"name": "truncate_flag",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_36i",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_36i",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-07-04T13:39:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

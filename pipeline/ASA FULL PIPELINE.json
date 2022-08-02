@@ -1,5 +1,5 @@
 {
-	"name": "MASTER PIPELINE",
+	"name": "ASA FULL PIPELINE",
 	"properties": {
 		"activities": [
 			{
@@ -12,13 +12,7 @@
 						"referenceName": "RESUME SYNAPSE",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
-						"resourceGroups": "DWCLOUD-DEV",
-						"servers": "vus-synapse-ws",
-						"databases": "VUSDWHDEV"
-					}
+					"waitOnCompletion": true
 				}
 			},
 			{
@@ -107,7 +101,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "VUS_ETL_MASTER",
+						"activity": "VUS_PLP",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -179,7 +173,7 @@
 				}
 			},
 			{
-				"name": "VUS_ETL_MASTER",
+				"name": "VUS_SDE_ASA",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -192,7 +186,47 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "VUS_ETL_MASTER",
+						"referenceName": "VUS_SDE_ASA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "VUS_SIL_ASA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SDE_ASA",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_SIL_ASA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "VUS_PLP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SIL_ASA",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_PLP",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
