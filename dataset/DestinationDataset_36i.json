@@ -1,0 +1,118 @@
+{
+	"name": "DestinationDataset_36i",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DWH_SYNAPSE_DEV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "JOB_ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "JOB_NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "JOB_DESC",
+				"type": "varchar"
+			},
+			{
+				"name": "JOB_GROUP",
+				"type": "varchar"
+			},
+			{
+				"name": "JOB_SUB_GROUP",
+				"type": "varchar"
+			},
+			{
+				"name": "JOB_TYPE",
+				"type": "varchar"
+			},
+			{
+				"name": "SOURCE_SCHEMA",
+				"type": "varchar"
+			},
+			{
+				"name": "SOURCE_TABLE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TARGET_SCHEMA",
+				"type": "varchar"
+			},
+			{
+				"name": "TARGET_TABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "JOB_SCRIPT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "PRUNE_DAYS",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FULL_LOAD_FLG",
+				"type": "char"
+			},
+			{
+				"name": "DATASOURCE_NUM_ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ACTIVE_FLG",
+				"type": "char"
+			},
+			{
+				"name": "CREATED_TS",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "LAST_UPDATED_TS",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "JOB_ORDER",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "INTEGRATION_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "INTEGRATION_COL",
+				"type": "varchar"
+			},
+			{
+				"name": "INTEGRATION_ORDER_COL",
+				"type": "varchar"
+			},
+			{
+				"name": "INCREMENTAL_COL",
+				"type": "nvarchar"
+			},
+			{
+				"name": "truncate_flag",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "ADF",
+			"table": "ETL_JOB_20220704"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

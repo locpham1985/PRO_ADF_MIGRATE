@@ -1,5 +1,5 @@
 {
-	"name": "VUS_SIL_GROUP_ASA 02",
+	"name": "VUS_PLP_GROUP_03",
 	"properties": {
 		"activities": [
 			{
@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlDWSource",
-						"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - ASA 02'",
+						"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' AND JOB_GROUP='PLP' AND JOB_SUB_GROUP='PLP - G03' ",
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
@@ -56,7 +56,7 @@
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "Source_Script",
+								"variableName": "Source_Script_G3",
 								"value": {
 									"value": "@{Item().SRC_LIST}",
 									"type": "Expression"
@@ -84,7 +84,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"storedProcedureName": {
-									"value": "@variables('Source_Script')",
+									"value": "@variables('Source_Script_G3')",
 									"type": "Expression"
 								},
 								"storedProcedureParameters": {
@@ -94,13 +94,6 @@
 											"type": "Expression"
 										},
 										"type": "Int64"
-									},
-									"p_target_table": {
-										"value": {
-											"value": "@variables('Target_Table')",
-											"type": "Expression"
-										},
-										"type": "String"
 									}
 								}
 							},
@@ -122,7 +115,7 @@
 							],
 							"userProperties": [],
 							"typeProperties": {
-								"variableName": "Target_Table",
+								"variableName": "Target_Table_G3",
 								"value": {
 									"value": "@{Item().TGT_TBL}",
 									"type": "Expression"
@@ -143,10 +136,10 @@
 			}
 		},
 		"variables": {
-			"Source_Script": {
+			"Source_Script_G3": {
 				"type": "String"
 			},
-			"Target_Table": {
+			"Target_Table_G3": {
 				"type": "String"
 			}
 		},
@@ -154,7 +147,7 @@
 			"name": "VUS_ETL"
 		},
 		"annotations": [],
-		"lastPublishTime": "2022-05-29T13:30:51Z"
+		"lastPublishTime": "2022-07-30T10:44:47Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

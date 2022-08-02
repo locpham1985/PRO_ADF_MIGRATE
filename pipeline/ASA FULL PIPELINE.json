@@ -20,7 +20,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "START SYNAPSE",
+						"activity": "SCALE UP DB",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -157,7 +157,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "REFRESH AS",
+						"activity": "SCALE DOWN DB",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -231,6 +231,46 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "SCALE UP DB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "START SYNAPSE",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SCALE UP DB",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SCALE DOWN DB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH AS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SCALE DOWN DB",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
@@ -249,7 +289,7 @@
 			"name": "VUS MASTER"
 		},
 		"annotations": [],
-		"lastPublishTime": "2022-06-29T16:45:11Z"
+		"lastPublishTime": "2022-07-31T04:02:58Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
