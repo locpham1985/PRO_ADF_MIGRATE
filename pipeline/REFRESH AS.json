@@ -237,11 +237,11 @@
 			},
 			"ClientID": {
 				"type": "String",
-				"defaultValue": "0cd077ea-2e1f-44bc-a43d-0c5b31913f91"
+				"defaultValue": "cadb53c2-c5c0-4b79-a027-122695b8750f"
 			},
 			"ClientSecret": {
 				"type": "String",
-				"defaultValue": "xld7Q~6E.e_3ji52dd6m2GcuMJEllVjVmC7VB"
+				"defaultValue": "Av97Q~Mi4ozuSErmdWEjS1kJeYh5UUsATKbwT"
 			},
 			"Region": {
 				"type": "String",
@@ -249,7 +249,7 @@
 			},
 			"Server": {
 				"type": "String",
-				"defaultValue": "vusasdev"
+				"defaultValue": "vusdwhasprod"
 			},
 			"DatabaseName": {
 				"type": "String",
@@ -270,7 +270,7 @@
 			"name": "AZURE AS"
 		},
 		"annotations": [],
-		"lastPublishTime": "2022-06-29T16:45:06Z"
+		"lastPublishTime": "2021-12-05T14:08:23Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

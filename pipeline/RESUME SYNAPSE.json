@@ -99,22 +99,22 @@
 			},
 			"resourceGroups": {
 				"type": "string",
-				"defaultValue": "DWCLOUD-DEV"
+				"defaultValue": "DWCLOUD-Prod"
 			},
 			"servers": {
 				"type": "string",
-				"defaultValue": "vus-synapse-ws"
+				"defaultValue": "vus-synapseprod-ws"
 			},
 			"databases": {
 				"type": "string",
-				"defaultValue": "VUSDWHDEV"
+				"defaultValue": "VUSDWHPRO"
 			}
 		},
 		"folder": {
 			"name": "AZURE SYNAPSE"
 		},
 		"annotations": [],
-		"lastPublishTime": "2022-06-29T16:45:06Z"
+		"lastPublishTime": "2021-11-30T05:20:44Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

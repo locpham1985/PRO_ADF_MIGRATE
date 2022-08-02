@@ -1,0 +1,115 @@
+{
+	"name": "SourceDataset_36i",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_STORAGE_ACCOUNT_DEV",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet2",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "ETL_JOB_with NOLOCK.xlsx",
+				"container": "manual"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "JOB_ID",
+				"type": "String"
+			},
+			{
+				"name": "JOB_NAME",
+				"type": "String"
+			},
+			{
+				"name": "JOB_DESC",
+				"type": "String"
+			},
+			{
+				"name": "JOB_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "JOB_SUB_GROUP",
+				"type": "String"
+			},
+			{
+				"name": "JOB_TYPE",
+				"type": "String"
+			},
+			{
+				"name": "SOURCE_SCHEMA",
+				"type": "String"
+			},
+			{
+				"name": "SOURCE_TABLE",
+				"type": "String"
+			},
+			{
+				"name": "TARGET_SCHEMA",
+				"type": "String"
+			},
+			{
+				"name": "TARGET_TABLE",
+				"type": "String"
+			},
+			{
+				"name": "JOB_SCRIPT",
+				"type": "String"
+			},
+			{
+				"name": "PRUNE_DAYS",
+				"type": "String"
+			},
+			{
+				"name": "FULL_LOAD_FLG",
+				"type": "String"
+			},
+			{
+				"name": "DATASOURCE_NUM_ID",
+				"type": "String"
+			},
+			{
+				"name": "ACTIVE_FLG",
+				"type": "String"
+			},
+			{
+				"name": "CREATED_TS",
+				"type": "String"
+			},
+			{
+				"name": "LAST_UPDATED_TS",
+				"type": "String"
+			},
+			{
+				"name": "JOB_ORDER",
+				"type": "String"
+			},
+			{
+				"name": "INTEGRATION_ID",
+				"type": "String"
+			},
+			{
+				"name": "INTEGRATION_COL",
+				"type": "String"
+			},
+			{
+				"name": "INTEGRATION_ORDER_COL",
+				"type": "String"
+			},
+			{
+				"name": "INCREMENTAL_COL",
+				"type": "String"
+			},
+			{
+				"name": "truncate_flag",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
