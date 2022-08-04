@@ -26,7 +26,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "SCALE UP DB",
+						"activity": "START SYNAPSE",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -143,7 +143,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "SCALE DOWN DB",
+						"activity": "END BATCH",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -176,58 +176,6 @@
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "SCALE UP DB",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "START SYNAPSE",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "SCALE UP DB",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"databases": "VUSDWHDEV",
-						"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
-						"ResourceGroups": "DWCLOUD-DEV",
-						"Servers": "vus-synapse-ws"
-					}
-				}
-			},
-			{
-				"name": "SCALE DOWN DB",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "END BATCH",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "SCALE DOWN DB",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"databases": "VUSDWHDEV",
-						"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
-						"ResourceGroups": "DWCLOUD-DEV",
-						"Servers": "vus-synapse-ws"
-					}
 				}
 			}
 		],
