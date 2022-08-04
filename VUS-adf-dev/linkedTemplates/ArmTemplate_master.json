@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "VUS-adf-dev"
 		},
-		"LMS_API_Service_YL_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LMS_API_Service_YL'"
-		},
 		"LS_DWH_SYNAPSE_DEV_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_DWH_SYNAPSE_DEV'"
@@ -26,14 +22,6 @@
 		"TQMCONNECTION_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TQMCONNECTION'"
-		},
-		"LMS_API_Service_YL_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_yl_scores"
-		},
-		"LMS_API_Service_YL_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "connect_user"
 		},
 		"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
@@ -66,9 +54,6 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LMS_API_Service_YL_password": {
-						"value": "[parameters('LMS_API_Service_YL_password')]"
-					},
 					"LS_DWH_SYNAPSE_DEV_connectionString": {
 						"value": "[parameters('LS_DWH_SYNAPSE_DEV_connectionString')]"
 					},
@@ -77,12 +62,6 @@
 					},
 					"Synapse Prod_connectionString": {
 						"value": "[parameters('Synapse Prod_connectionString')]"
-					},
-					"LMS_API_Service_YL_properties_typeProperties_url": {
-						"value": "[parameters('LMS_API_Service_YL_properties_typeProperties_url')]"
-					},
-					"LMS_API_Service_YL_properties_typeProperties_userName": {
-						"value": "[parameters('LMS_API_Service_YL_properties_typeProperties_userName')]"
 					},
 					"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
 						"value": "[parameters('IR-Share_properties_typeProperties_linkedInfo_resourceId')]"

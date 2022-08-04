@@ -5,9 +5,6 @@
 		"factoryName": {
 			"value": "VUS-adf-dev"
 		},
-		"LMS_API_Service_YL_password": {
-			"value": ""
-		},
 		"LS_DWH_SYNAPSE_DEV_connectionString": {
 			"value": ""
 		},
@@ -19,12 +16,6 @@
 		},
 		"TQMCONNECTION_connectionString": {
 			"value": ""
-		},
-		"LMS_API_Service_YL_properties_typeProperties_url": {
-			"value": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_yl_scores"
-		},
-		"LMS_API_Service_YL_properties_typeProperties_userName": {
-			"value": "connect_user"
 		},
 		"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
 			"value": "/subscriptions/d607421b-81ca-426a-8942-2fd12f5c9611/resourcegroups/DWCLOUD-Prod/providers/Microsoft.DataFactory/factories/vus-adf-prod/integrationruntimes/IR-PROD"

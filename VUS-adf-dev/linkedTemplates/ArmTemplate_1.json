@@ -17,313 +17,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_36i')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Sheet2",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "ETL_JOB_with NOLOCK.xlsx",
-						"container": "manual"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "JOB_ID",
-						"type": "String"
-					},
-					{
-						"name": "JOB_NAME",
-						"type": "String"
-					},
-					{
-						"name": "JOB_DESC",
-						"type": "String"
-					},
-					{
-						"name": "JOB_GROUP",
-						"type": "String"
-					},
-					{
-						"name": "JOB_SUB_GROUP",
-						"type": "String"
-					},
-					{
-						"name": "JOB_TYPE",
-						"type": "String"
-					},
-					{
-						"name": "SOURCE_SCHEMA",
-						"type": "String"
-					},
-					{
-						"name": "SOURCE_TABLE",
-						"type": "String"
-					},
-					{
-						"name": "TARGET_SCHEMA",
-						"type": "String"
-					},
-					{
-						"name": "TARGET_TABLE",
-						"type": "String"
-					},
-					{
-						"name": "JOB_SCRIPT",
-						"type": "String"
-					},
-					{
-						"name": "PRUNE_DAYS",
-						"type": "String"
-					},
-					{
-						"name": "FULL_LOAD_FLG",
-						"type": "String"
-					},
-					{
-						"name": "DATASOURCE_NUM_ID",
-						"type": "String"
-					},
-					{
-						"name": "ACTIVE_FLG",
-						"type": "String"
-					},
-					{
-						"name": "CREATED_TS",
-						"type": "String"
-					},
-					{
-						"name": "LAST_UPDATED_TS",
-						"type": "String"
-					},
-					{
-						"name": "JOB_ORDER",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_ID",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_COL",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_ORDER_COL",
-						"type": "String"
-					},
-					{
-						"name": "INCREMENTAL_COL",
-						"type": "String"
-					},
-					{
-						"name": "truncate_flag",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_xdx')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "SRC_EXCEL"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "calendar.csv",
-						"container": "manual"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "DATE_KEY",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_KEY",
-						"type": "String"
-					},
-					{
-						"name": "DATE_NAME",
-						"type": "String"
-					},
-					{
-						"name": "FULL_DATE_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "DAY_SUFFIX",
-						"type": "String"
-					},
-					{
-						"name": "DAY_NAME",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_IN_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_IN_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "MONTH",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_NAME",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "QUARTER_NAME",
-						"type": "String"
-					},
-					{
-						"name": "YEAR",
-						"type": "String"
-					},
-					{
-						"name": "YEAR_NAME",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "MMYYYY",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "IS_WEEKDAY",
-						"type": "String"
-					},
-					{
-						"name": "IS_HOLIDAY_VN",
-						"type": "String"
-					},
-					{
-						"name": "HOLIDAY_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_TYPE",
-						"type": "String"
-					},
-					{
-						"name": "W_INTEGRATION_ID",
-						"type": "String"
-					},
-					{
-						"name": "W_DELETE_FLG",
-						"type": "String"
-					},
-					{
-						"name": "W_INSERT_DT",
-						"type": "String"
-					},
-					{
-						"name": "W_UPDATE_DT",
-						"type": "String"
-					},
-					{
-						"name": "W_DATASOURCE_NUM_ID",
-						"type": "String"
-					},
-					{
-						"name": "W_BATCH_ID",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/Target')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -909,11 +602,9 @@
 					"cancelAfter": {}
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2021-11-29T16:00:52Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_xdx')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LOAD RLS')]",
@@ -986,7 +677,7 @@
 					"name": "VUS EXCEL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2021-11-29T16:00:52Z"
 			},
 			"dependsOn": []
 		},
@@ -1066,7 +757,7 @@
 					"name": "VUS EXCEL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-20T14:41:18Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Target')]"
@@ -1380,9 +1071,7 @@
 				"annotations": [],
 				"lastPublishTime": "2022-07-04T13:39:20Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_36i')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/REFRESH AS GENERAL')]",
@@ -1391,7 +1080,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Get List Refresh",
+						"name": "Get List Refresh_G0",
 						"type": "Lookup",
 						"dependsOn": [
 							{
@@ -1416,7 +1105,7 @@
 								"storedProcedureParameters": {
 									"group_name": {
 										"type": "String",
-										"value": "All"
+										"value": "G0"
 									}
 								},
 								"queryTimeout": "02:00:00",
@@ -1432,11 +1121,11 @@
 						}
 					},
 					{
-						"name": "Set List_Table",
+						"name": "Set List_Table_G0",
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "Get List Refresh",
+								"activity": "Get List Refresh_G0",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1444,19 +1133,19 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"variableName": "List_Table",
+							"variableName": "List_Table_G0",
 							"value": {
-								"value": "@concat(activity('Get List Refresh').output.firstRow.AAA)",
+								"value": "@concat(activity('Get List Refresh_G0').output.firstRow.AAA)",
 								"type": "Expression"
 							}
 						}
 					},
 					{
-						"name": "Refresh AS",
+						"name": "Refresh AS_G0",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "Set List_Table",
+								"activity": "Set List_Table_G0",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1471,7 +1160,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"RefreshRequestBody": {
-									"value": "@variables('List_Table')",
+									"value": "@variables('List_Table_G0')",
 									"type": "Expression"
 								}
 							}
@@ -1488,7 +1177,447 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"TenantID": "d1005fc5-bff9-42d5-81e5-1f3fcb089799",
+								"SubscriptionID": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroup": "DWCLOUD-DEV",
+								"ServerName": "vusasdev"
+							}
+						}
+					},
+					{
+						"name": "Get List Refresh_G1",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Refresh AS_G0",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_ETL_REFRESH_SSAS]",
+								"storedProcedureParameters": {
+									"group_name": {
+										"type": "String",
+										"value": "G1"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ETL_REFRESH_SSAS"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set List_Table_G1",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get List Refresh_G1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "List_Table_G1",
+							"value": {
+								"value": "@concat(activity('Get List Refresh_G1').output.firstRow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Refresh AS_G1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Set List_Table_G1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"RefreshRequestBody": {
+									"value": "@variables('List_Table_G1')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Get List Refresh_G2",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Refresh AS_G1",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_ETL_REFRESH_SSAS]",
+								"storedProcedureParameters": {
+									"group_name": {
+										"type": "String",
+										"value": "G2"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ETL_REFRESH_SSAS"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set List_Table_G2",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get List Refresh_G2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "List_Table_G2",
+							"value": {
+								"value": "@concat(activity('Get List Refresh_G2').output.firstRow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Refresh AS_G2",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Set List_Table_G2",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"RefreshRequestBody": {
+									"value": "@variables('List_Table_G2')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Get List Refresh_G3",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Refresh AS_G2",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_ETL_REFRESH_SSAS]",
+								"storedProcedureParameters": {
+									"group_name": {
+										"type": "String",
+										"value": "G3"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ETL_REFRESH_SSAS"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set List_Table_G3",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get List Refresh_G3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "List_Table_G3",
+							"value": {
+								"value": "@concat(activity('Get List Refresh_G3').output.firstRow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Refresh AS_G3",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Set List_Table_G3",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"RefreshRequestBody": {
+									"value": "@variables('List_Table_G3')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Get List Refresh_G4",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Refresh AS_G3",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_ETL_REFRESH_SSAS]",
+								"storedProcedureParameters": {
+									"group_name": {
+										"type": "String",
+										"value": "G4"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ETL_REFRESH_SSAS"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set List_Table_G4",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get List Refresh_G4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "List_Table_G4",
+							"value": {
+								"value": "@concat(activity('Get List Refresh_G4').output.firstRow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Refresh AS_G4",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Set List_Table_G4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"RefreshRequestBody": {
+									"value": "@variables('List_Table_G4')",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Get List Refresh_G5",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "Refresh AS_G4",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_ETL_REFRESH_SSAS]",
+								"storedProcedureParameters": {
+									"group_name": {
+										"type": "String",
+										"value": "G5"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ETL_REFRESH_SSAS"
+								}
+							}
+						}
+					},
+					{
+						"name": "Set List_Table_G5",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "Get List Refresh_G5",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "List_Table_G5",
+							"value": {
+								"value": "@concat(activity('Get List Refresh_G5').output.firstRow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Refresh AS_G5",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Set List_Table_G5",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"RefreshRequestBody": {
+									"value": "@variables('List_Table_G5')",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -1497,7 +1626,22 @@
 					"cancelAfter": {}
 				},
 				"variables": {
-					"List_Table": {
+					"List_Table_G0": {
+						"type": "String"
+					},
+					"List_Table_G1": {
+						"type": "String"
+					},
+					"List_Table_G2": {
+						"type": "String"
+					},
+					"List_Table_G3": {
+						"type": "String"
+					},
+					"List_Table_G4": {
+						"type": "String"
+					},
+					"List_Table_G5": {
 						"type": "String"
 					}
 				},
@@ -1505,7 +1649,7 @@
 					"name": "AZURE AS"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-24T03:03:46Z"
 			},
 			"dependsOn": []
 		},
@@ -1664,7 +1808,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:59:38Z"
 			},
 			"dependsOn": []
 		},
@@ -1823,7 +1967,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:59:38Z"
 			},
 			"dependsOn": []
 		},
@@ -1982,7 +2126,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:59:38Z"
 			},
 			"dependsOn": []
 		},
@@ -2142,6 +2286,163 @@
 				},
 				"annotations": [],
 				"lastPublishTime": "2022-07-30T10:44:47Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GENERAL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup SRC List",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - General'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_STAGING",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ADF.ETL_JOB"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup SRC List",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup SRC List').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set Source Script",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Source_Script",
+										"value": {
+											"value": "@{Item().SRC_LIST}",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "SIL Store Procedure",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Set Target Table",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": {
+											"value": "@variables('Source_Script')",
+											"type": "Expression"
+										},
+										"storedProcedureParameters": {
+											"p_batch_id": {
+												"value": {
+													"value": "@pipeline().parameters.BATCH_ID",
+													"type": "Expression"
+												},
+												"type": "Int64"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LS_DWH_SYNAPSE_DEV",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Set Target Table",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Target_Table",
+										"value": {
+											"value": "@{Item().TGT_TBL}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"concurrency": 6,
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"BATCH_ID": {
+						"type": "string",
+						"defaultValue": "19000101"
+					}
+				},
+				"variables": {
+					"Source_Script": {
+						"type": "String"
+					},
+					"Target_Table": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "VUS_ETL"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-06-06T15:40:33Z"
 			},
 			"dependsOn": []
 		},
@@ -2307,7 +2608,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:30:51Z"
 			},
 			"dependsOn": []
 		},
@@ -2473,7 +2774,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:30:51Z"
 			},
 			"dependsOn": []
 		},
@@ -2639,7 +2940,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:30:51Z"
 			},
 			"dependsOn": []
 		},
@@ -2947,7 +3248,6 @@
 						}
 					}
 				],
-				"concurrency": 6,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -2973,7 +3273,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:58:30Z"
 			},
 			"dependsOn": []
 		},
@@ -3114,7 +3414,6 @@
 						}
 					}
 				],
-				"concurrency": 6,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -3140,7 +3439,173 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:58:30Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GROUP_TQM 01')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup SRC List",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - TQM 01'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_STAGING",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "ADF.ETL_JOB"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup SRC List",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup SRC List').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set Source Script",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Source_Script",
+										"value": {
+											"value": "@{Item().SRC_LIST}",
+											"type": "Expression"
+										}
+									}
+								},
+								{
+									"name": "SIL Store Procedure",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [
+										{
+											"activity": "Set Target Table",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": {
+											"value": "@variables('Source_Script')",
+											"type": "Expression"
+										},
+										"storedProcedureParameters": {
+											"p_batch_id": {
+												"value": {
+													"value": "@pipeline().parameters.BATCH_ID",
+													"type": "Expression"
+												},
+												"type": "Int64"
+											},
+											"p_target_table": {
+												"value": {
+													"value": "@variables('Target_Table')",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LS_DWH_SYNAPSE_DEV",
+										"type": "LinkedServiceReference"
+									}
+								},
+								{
+									"name": "Set Target Table",
+									"type": "SetVariable",
+									"dependsOn": [
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Target_Table",
+										"value": {
+											"value": "@{Item().TGT_TBL}",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"BATCH_ID": {
+						"type": "string",
+						"defaultValue": "19000101"
+					},
+					"TGT_TABLE": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"Source_Script": {
+						"type": "String"
+					},
+					"Target_Table": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "VUS_ETL"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-05-29T13:30:51Z"
 			},
 			"dependsOn": []
 		}

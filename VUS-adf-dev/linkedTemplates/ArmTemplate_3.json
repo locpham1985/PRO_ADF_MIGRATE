@@ -13,76 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/VUS_ETL_MASTER')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "SDE",
-						"type": "ExecutePipeline",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "VUS_SDE",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"BATCH_ID": {
-									"value": "@pipeline().parameters.BATCH_ID",
-									"type": "Expression"
-								}
-							}
-						}
-					},
-					{
-						"name": "SIL",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "SDE",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "VUS_SIL",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {
-								"BATCH_ID": {
-									"value": "@pipeline().parameters.BATCH_ID",
-									"type": "Expression"
-								}
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"BATCH_ID": {
-						"type": "string",
-						"defaultValue": "19000101"
-					}
-				},
-				"folder": {
-					"name": "VUS_ETL"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:11Z"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/MASTER PIPELINE')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -99,7 +29,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"resourceGroups": "DWCLOUD-Prod",
+								"servers": "vus-synapseprod-ws",
+								"databases": "VUSDWHPRO"
+							}
 						}
 					},
 					{
@@ -107,7 +42,7 @@
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "START SYNAPSE",
+								"activity": "SCALE UP DB",
 								"dependencyConditions": [
 									"Completed"
 								]
@@ -245,7 +180,7 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "REFRESH AS",
+								"activity": "SCALE DOWN DB",
 								"dependencyConditions": [
 									"Completed"
 								]
@@ -281,6 +216,58 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "SCALE UP DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "START SYNAPSE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE UP DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"databases": "VUSDWHDEV",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-DEV",
+								"Servers": "vus-synapse-ws"
+							}
+						}
+					},
+					{
+						"name": "SCALE DOWN DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "REFRESH AS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE DOWN DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"databases": "VUSDWHDEV",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-DEV",
+								"Servers": "vus-synapse-ws"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -303,11 +290,9 @@
 					"name": "VUS MASTER"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:12Z"
+				"lastPublishTime": "2022-07-31T04:02:58Z"
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/VUS_ETL_MASTER')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/12h15')]",

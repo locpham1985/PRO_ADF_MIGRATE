@@ -13,172 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GROUP_TQM 01')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup SRC List",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlDWSource",
-								"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - TQM 01'",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "DS_DWH_SYNAPSE_STAGING",
-								"type": "DatasetReference",
-								"parameters": {
-									"TableName": "ADF.ETL_JOB"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup SRC List').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Set Source Script",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Source_Script",
-										"value": {
-											"value": "@{Item().SRC_LIST}",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "SIL Store Procedure",
-									"type": "SqlServerStoredProcedure",
-									"dependsOn": [
-										{
-											"activity": "Set Target Table",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"storedProcedureName": {
-											"value": "@variables('Source_Script')",
-											"type": "Expression"
-										},
-										"storedProcedureParameters": {
-											"p_batch_id": {
-												"value": {
-													"value": "@pipeline().parameters.BATCH_ID",
-													"type": "Expression"
-												},
-												"type": "Int64"
-											},
-											"p_target_table": {
-												"value": {
-													"value": "@variables('Target_Table')",
-													"type": "Expression"
-												},
-												"type": "String"
-											}
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "LS_DWH_SYNAPSE_DEV",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "Set Target Table",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Set Source Script",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Target_Table",
-										"value": {
-											"value": "@{Item().TGT_TBL}",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"BATCH_ID": {
-						"type": "string",
-						"defaultValue": "19000101"
-					},
-					"TGT_TABLE": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"Source_Script": {
-						"type": "String"
-					},
-					"Target_Table": {
-						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "VUS_ETL"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GROUP_TQM 02')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -340,7 +174,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:30:51Z"
 			},
 			"dependsOn": []
 		},
@@ -641,6 +475,27 @@
 							"referenceName": "LS_DWH_SYNAPSE_DEV",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "VUS_PLP_GROUP_03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_PLP_GROUP_02",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_PLP_GROUP_03",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -657,7 +512,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:09Z"
+				"lastPublishTime": "2022-07-31T03:06:40Z"
 			},
 			"dependsOn": []
 		},
@@ -1162,7 +1017,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:16:13Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -1669,7 +1524,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:16:12Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -2176,7 +2031,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:16:13Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -2934,7 +2789,7 @@
 											"polyBaseSettings": {
 												"rejectValue": 0,
 												"rejectType": "value",
-												"useTypeDefault": true
+												"useTypeDefault": false
 											},
 											"disableMetricsCollection": false
 										},
@@ -2944,7 +2799,7 @@
 												"referenceName": "LS_STORAGE_ACCOUNT_DEV",
 												"type": "LinkedServiceReference"
 											},
-											"path": "adfstagedpolybasetempdata"
+											"path": "logadf"
 										}
 									},
 									"inputs": [
@@ -3154,7 +3009,6 @@
 						}
 					}
 				],
-				"concurrency": 6,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -3186,7 +3040,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:56:05Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -3438,7 +3292,12 @@
 												"value": "TRUNCATE TABLE [STG].[@{Item().TGT_TBL}]",
 												"type": "Expression"
 											},
-											"tableOption": "autoCreate",
+											"allowPolyBase": true,
+											"polyBaseSettings": {
+												"rejectValue": 0,
+												"rejectType": "value",
+												"useTypeDefault": false
+											},
 											"disableMetricsCollection": false
 										},
 										"enableStaging": true,
@@ -3447,7 +3306,7 @@
 												"referenceName": "LS_STORAGE_ACCOUNT_DEV",
 												"type": "LinkedServiceReference"
 											},
-											"path": "adfstagedpolybasetempdata"
+											"path": "logadf"
 										}
 									},
 									"inputs": [
@@ -3657,7 +3516,6 @@
 						}
 					}
 				],
-				"concurrency": 6,
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
@@ -3689,7 +3547,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T07:56:05Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -4196,7 +4054,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:22:31Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -4703,7 +4561,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:08Z"
+				"lastPublishTime": "2022-05-29T13:22:31Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/VUS_Source')]"
@@ -5219,13 +5077,13 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "VUS_SIL_GROUP_ASA",
+						"name": "VUS_SIL_GROUP_ASA 01",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "VUS_SIL_GROUP_ASA",
+								"referenceName": "VUS_SIL_GROUP_ASA 01",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -5233,13 +5091,13 @@
 						}
 					},
 					{
-						"name": "VUS_SIL_GROUP_TQM",
+						"name": "VUS_SIL_GROUP_TQM 01",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "VUS_SIL_GROUP_TQM",
+								"referenceName": "VUS_SIL_GROUP_TQM 01",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -5254,6 +5112,69 @@
 						"typeProperties": {
 							"pipeline": {
 								"referenceName": "VUS_SIL_GROUP_QLGV",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SIL_GROUP_CRM",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SIL_GROUP_QLGV",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GROUP_CRM",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SIL_GROUP_ASA 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GROUP_ASA 02",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SIL_GROUP_ASA 03",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GROUP_ASA 03",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SIL_GROUP_TQM 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GROUP_TQM 02",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -5275,10 +5196,10 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:10Z"
+				"lastPublishTime": "2022-05-29T13:30:52Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GROUP_TQM')]"
+				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GROUP_TQM 02')]"
 			]
 		},
 		{
@@ -5344,7 +5265,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:10Z"
+				"lastPublishTime": "2022-05-31T15:18:18Z"
 			},
 			"dependsOn": []
 		},
@@ -5398,7 +5319,7 @@
 					"name": "VUS MASTER"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:10Z"
+				"lastPublishTime": "2022-05-29T13:30:52Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA 03')]"
@@ -5411,13 +5332,13 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "VUS_SDE_GROUP_ASA",
+						"name": "VUS_SDE_GROUP_ASA 03",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "VUS_SDE_GROUP_ASA",
+								"referenceName": "VUS_SDE_GROUP_ASA 03",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -5439,13 +5360,76 @@
 						}
 					},
 					{
-						"name": "VUS_SDE_GROUP_TQM",
+						"name": "VUS_SDE_GROUP_TQM 01",
 						"type": "ExecutePipeline",
 						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "VUS_SDE_GROUP_TQM",
+								"referenceName": "VUS_SDE_GROUP_TQM 01",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SDE_GROUP_CRM",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SDE_GROUP_QLGV",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE_GROUP_CRM",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SDE_GROUP_ASA 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE_GROUP_ASA 01",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SDE_GROUP_ASA 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE_GROUP_ASA 02",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SDE_GROUP_TQM 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE_GROUP_TQM 02",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
@@ -5466,12 +5450,16 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:10Z"
+				"lastPublishTime": "2022-05-29T13:22:31Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA 03')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_QLGV')]",
-				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_TQM')]"
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_TQM 01')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_CRM')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA 01')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA 02')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_TQM 02')]"
 			]
 		},
 		{
@@ -5536,7 +5524,7 @@
 					"name": "VUS_ETL"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:10Z"
+				"lastPublishTime": "2022-05-31T15:18:18Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_GROUP_ASA 03')]",
@@ -5569,7 +5557,7 @@
 						"type": "SetVariable",
 						"dependsOn": [
 							{
-								"activity": "START SYNAPSE",
+								"activity": "SCALE UP DB",
 								"dependencyConditions": [
 									"Completed"
 								]
@@ -5707,7 +5695,7 @@
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "REFRESH AS",
+								"activity": "SCALE DOWN DB",
 								"dependencyConditions": [
 									"Completed"
 								]
@@ -5785,6 +5773,48 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "SCALE UP DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "START SYNAPSE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE UP DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SCALE DOWN DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "REFRESH AS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE DOWN DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -5807,11 +5837,127 @@
 					"name": "VUS MASTER"
 				},
 				"annotations": [],
-				"lastPublishTime": "2022-06-29T16:45:11Z"
+				"lastPublishTime": "2022-07-31T04:02:58Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/VUS_SDE_ASA')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_ASA')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_PLP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUS_ETL_MASTER')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SDE",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BATCH_ID": {
+									"value": "@pipeline().parameters.BATCH_ID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SIL",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SDE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BATCH_ID": {
+									"value": "@pipeline().parameters.BATCH_ID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SIL GENERAL",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SIL",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GENERAL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_PLP",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SIL GENERAL",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_PLP",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"BATCH_ID": {
+						"type": "string",
+						"defaultValue": "19000101"
+					}
+				},
+				"folder": {
+					"name": "VUS_ETL"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-06-06T15:40:34Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/VUS_SDE')]",
+				"[concat(variables('factoryId'), '/pipelines/VUS_SIL')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_PLP')]"
 			]
 		}
