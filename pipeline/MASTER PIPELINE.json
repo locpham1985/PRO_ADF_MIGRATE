@@ -217,10 +217,10 @@
 					},
 					"waitOnCompletion": true,
 					"parameters": {
-						"databases": "VUSDWHPRO",
+						"databases": "VUSDWHDEV",
 						"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
-						"ResourceGroups": "DWCLOUD-Prod",
-						"Servers": "vus-synapseprod-ws"
+						"ResourceGroups": "DWCLOUD-DEV",
+						"Servers": "vus-synapse-ws"
 					}
 				}
 			},
