@@ -1409,9 +1409,9 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
-								"resourceGroups": "DWCLOUD-Prod",
-								"servers": "vus-synapseprod-ws",
-								"databases": "VUSDWHPRO"
+								"resourceGroups": "DWCLOUD-DEV",
+								"servers": "vus-synapse-ws",
+								"databases": "VUSDWHDEV"
 							}
 						}
 					},
@@ -2941,7 +2941,7 @@
 					},
 					"resourceGroups": {
 						"type": "string",
-						"defaultValue": "DWCLOUD-Prod"
+						"defaultValue": "DWCLOUD-DEV"
 					},
 					"servers": {
 						"type": "string",
@@ -2949,7 +2949,7 @@
 					},
 					"databases": {
 						"type": "string",
-						"defaultValue": "VUSDWHPRO"
+						"defaultValue": "VUSDWHDEV"
 					}
 				},
 				"folder": {
