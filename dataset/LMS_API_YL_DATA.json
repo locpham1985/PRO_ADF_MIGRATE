@@ -1,0 +1,16 @@
+{
+	"name": "LMS_API_YL_DATA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LMS_API_Service_YL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"para_type": "YL"
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

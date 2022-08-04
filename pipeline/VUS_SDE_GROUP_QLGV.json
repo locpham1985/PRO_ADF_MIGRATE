@@ -242,12 +242,7 @@
 										"value": "TRUNCATE TABLE [STG].[@{Item().TGT_TBL}]",
 										"type": "Expression"
 									},
-									"allowPolyBase": true,
-									"polyBaseSettings": {
-										"rejectValue": 0,
-										"rejectType": "value",
-										"useTypeDefault": false
-									},
+									"tableOption": "autoCreate",
 									"disableMetricsCollection": false
 								},
 								"enableStaging": true,
@@ -256,7 +251,7 @@
 										"referenceName": "LS_STORAGE_ACCOUNT_DEV",
 										"type": "LinkedServiceReference"
 									},
-									"path": "logadf"
+									"path": "adfstagedpolybasetempdata"
 								}
 							},
 							"inputs": [
@@ -466,6 +461,7 @@
 				}
 			}
 		],
+		"concurrency": 6,
 		"parameters": {
 			"BATCH_ID": {
 				"type": "string",
@@ -493,7 +489,7 @@
 			"name": "VUS_ETL"
 		},
 		"annotations": [],
-		"lastPublishTime": "2022-05-29T07:56:05Z"
+		"lastPublishTime": "2022-06-29T16:45:08Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
