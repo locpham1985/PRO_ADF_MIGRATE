@@ -99,7 +99,7 @@
 			},
 			"resourceGroups": {
 				"type": "string",
-				"defaultValue": "DWCLOUD-Prod"
+				"defaultValue": "DWCLOUD-DEV"
 			},
 			"servers": {
 				"type": "string",
@@ -107,7 +107,7 @@
 			},
 			"databases": {
 				"type": "string",
-				"defaultValue": "VUSDWHPRO"
+				"defaultValue": "VUSDWHDEV"
 			}
 		},
 		"folder": {
