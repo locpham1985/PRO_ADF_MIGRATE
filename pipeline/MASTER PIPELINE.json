@@ -139,26 +139,6 @@
 				}
 			},
 			{
-				"name": "REFRESH AS",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "END BATCH",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "REFRESH AS GENERAL",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
 				"name": "PAUSE SYNAPSE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
@@ -229,7 +209,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "REFRESH AS",
+						"activity": "END BATCH",
 						"dependencyConditions": [
 							"Completed"
 						]
