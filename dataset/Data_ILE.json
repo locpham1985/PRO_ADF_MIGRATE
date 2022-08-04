@@ -1,0 +1,19 @@
+{
+	"name": "Data_ILE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LMS_API_ILE",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"para_date": "2022-08-04",
+				"para_type": "ile"
+			}
+		},
+		"folder": {
+			"name": "SRC_API"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}

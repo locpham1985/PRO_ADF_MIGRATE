@@ -1,0 +1,19 @@
+{
+	"name": "Data_YL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LMS_API_YL",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"para_date": "2022-08-04",
+				"para_type": "YL"
+			}
+		},
+		"folder": {
+			"name": "SRC_API"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"schema": []
+	}
+}
