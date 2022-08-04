@@ -99,15 +99,15 @@
 			},
 			"resourceGroups": {
 				"type": "string",
-				"defaultValue": "DWCLOUD-Prod"
+				"defaultValue": "DWCLOUD-DEV"
 			},
 			"servers": {
 				"type": "string",
-				"defaultValue": "vus-synapseprod-ws"
+				"defaultValue": "vus-synapse-ws"
 			},
 			"databases": {
 				"type": "string",
-				"defaultValue": "VUSDWHPRO"
+				"defaultValue": "VUSDWHDEV"
 			}
 		},
 		"folder": {
