@@ -23,25 +23,32 @@
 		],
 		"parameters": {
 			"Title": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Error"
 			},
 			"DataFactoryName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "ADF"
 			},
 			"EmailTo": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "locpham@vus-etsc.edu.vn"
 			},
 			"ErrorMessage": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Error"
 			},
 			"PipelineName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "ADF"
 			},
 			"Status": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Error"
 			},
 			"SuccessMessage": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "Success"
 			}
 		},
 		"annotations": []
