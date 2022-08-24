@@ -23,7 +23,8 @@
 					"body": {
 						"value": "{“EmailTo”: “@{pipeline().parameters.EmailTo}”,”Title”: “@{pipeline().parameters.Title}”,”DataFactoryName”: “@{pipeline().parameters.DataFactoryName}”,”PipelineName”: “@{pipeline().parameters.PipelineName}”,”Status”: “@{pipeline().parameters.Status}”,”ErrorMessage”: “@{pipeline().parameters.ErrorMessage}”,”SuccessMessage”: “@{pipeline().parameters.SuccessMessage}”}",
 						"type": "Expression"
-					}
+					},
+					"disableCertValidation": true
 				}
 			}
 		],
