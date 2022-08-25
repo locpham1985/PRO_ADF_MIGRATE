@@ -101,7 +101,7 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE SDE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
