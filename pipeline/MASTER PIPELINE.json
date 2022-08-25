@@ -323,6 +323,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "SEND SUCCESS MESSAGE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PAUSE SYNAPSE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
