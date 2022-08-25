@@ -122,27 +122,7 @@
 						"referenceName": "SEND EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"DataFactoryName": {
-							"value": "@pipeline().DataFactory",
-							"type": "Expression"
-						},
-						"EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
-						"ErrorMessage": {
-							"value": "@activity('SDE').Error.message",
-							"type": "Expression"
-						},
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						},
-						"Status": "Success",
-						"SuccessMessage": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						}
-					}
+					"waitOnCompletion": true
 				}
 			}
 		],

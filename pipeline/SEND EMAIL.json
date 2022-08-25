@@ -31,23 +31,23 @@
 		"parameters": {
 			"Title": {
 				"type": "string",
-				"defaultValue": "Error"
+				"defaultValue": "[The etl error]"
 			},
 			"DataFactoryName": {
 				"type": "string",
-				"defaultValue": "ADF"
+				"defaultValue": "@pipeline().DataFactory"
 			},
 			"EmailTo": {
 				"type": "string",
-				"defaultValue": "locpham@vus-etsc.edu.vn"
+				"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
 			},
 			"ErrorMessage": {
 				"type": "string",
-				"defaultValue": "Error"
+				"defaultValue": "@activity('SDE').Error.message"
 			},
 			"PipelineName": {
 				"type": "string",
-				"defaultValue": "ADF"
+				"defaultValue": "@pipeline().Pipeline"
 			},
 			"Status": {
 				"type": "string",
