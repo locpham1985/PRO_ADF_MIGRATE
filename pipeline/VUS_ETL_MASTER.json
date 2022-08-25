@@ -112,7 +112,7 @@
 						},
 						"EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
 						"ErrorMessage": {
-							"value": "@activity('START SYNAPSE').Error.message",
+							"value": "@activity('SDE').Error.message",
 							"type": "Expression"
 						},
 						"PipelineName": {
