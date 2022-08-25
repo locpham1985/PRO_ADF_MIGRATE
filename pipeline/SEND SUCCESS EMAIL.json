@@ -43,7 +43,7 @@
 			},
 			"ErrorMessage": {
 				"type": "string",
-				"defaultValue": "@activity('SDE').Error.message"
+				"defaultValue": "Error"
 			},
 			"PipelineName": {
 				"type": "string",
