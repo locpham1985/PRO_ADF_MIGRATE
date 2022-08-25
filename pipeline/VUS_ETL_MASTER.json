@@ -88,11 +88,29 @@
 				}
 			},
 			{
-				"name": "Notification Error",
+				"name": "SEND ERROR MESAGE SDE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
 						"activity": "SDE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "SIL",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "SIL GENERAL",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_PLP",
 						"dependencyConditions": [
 							"Failed"
 						]
