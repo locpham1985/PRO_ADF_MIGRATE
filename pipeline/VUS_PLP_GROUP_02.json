@@ -145,7 +145,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "SEND EMAIL",
+						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
