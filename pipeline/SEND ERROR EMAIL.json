@@ -1,5 +1,5 @@
 {
-	"name": "SEND EMAIL",
+	"name": "SEND ERROR EMAIL",
 	"properties": {
 		"activities": [
 			{
