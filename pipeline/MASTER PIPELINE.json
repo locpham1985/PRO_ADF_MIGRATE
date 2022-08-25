@@ -177,45 +177,6 @@
 					},
 					"waitOnCompletion": true
 				}
-			},
-			{
-				"name": "Send Notification",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "START SYNAPSE",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "Send Notification",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"DataFactoryName": {
-							"value": "@pipeline().DataFactory",
-							"type": "Expression"
-						},
-						"ErrorMessage": {
-							"value": "@activity('START SYNAPSE').output",
-							"type": "Expression"
-						},
-						"PipelineName": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						},
-						"Status": "Success",
-						"SuccessMessage": {
-							"value": "@pipeline().Pipeline",
-							"type": "Expression"
-						}
-					}
-				}
 			}
 		],
 		"variables": {
