@@ -40,6 +40,38 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "SEND EMAIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SIL_GROUP_ASA 01",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_SIL_GROUP_ASA 02",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_SIL_GROUP_ASA 03",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {
