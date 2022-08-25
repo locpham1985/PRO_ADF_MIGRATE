@@ -86,6 +86,46 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Notification Error",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SDE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Send Notification",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DataFactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
+						"ErrorMessage": {
+							"value": "@activity('START SYNAPSE').Error.message",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						},
+						"Status": "Success",
+						"SuccessMessage": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
