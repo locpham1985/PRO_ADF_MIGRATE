@@ -88,7 +88,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESAGE SDE",
+				"name": "SEND ERROR MESAGE ETL MASTER",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
