@@ -21,7 +21,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\n  \"Title\": \"@{pipeline().parameters.Title}\",\n  \"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\n  \"PipelineName\": \"@{pipeline().parameters.PipelineName}\"\",\n  \"Status\": \"@{pipeline().parameters.Status}\"\",\n  \"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\"\",\n  \"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"\n  }",
+						"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
 						"type": "Expression"
 					},
 					"disableCertValidation": true
