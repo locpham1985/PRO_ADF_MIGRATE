@@ -31,7 +31,7 @@
 		"parameters": {
 			"Title": {
 				"type": "string",
-				"defaultValue": "[The etl error]"
+				"defaultValue": "[The etl success]"
 			},
 			"DataFactoryName": {
 				"type": "string",
@@ -51,7 +51,7 @@
 			},
 			"Status": {
 				"type": "string",
-				"defaultValue": "Fail"
+				"defaultValue": "Success"
 			},
 			"SuccessMessage": {
 				"type": "string",
