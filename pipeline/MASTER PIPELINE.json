@@ -201,6 +201,10 @@
 							"value": "@pipeline().DataFactory",
 							"type": "Expression"
 						},
+						"ErrorMessage": {
+							"value": "@activity('START SYNAPSE').output",
+							"type": "Expression"
+						},
 						"PipelineName": {
 							"value": "@pipeline().Pipeline",
 							"type": "Expression"
