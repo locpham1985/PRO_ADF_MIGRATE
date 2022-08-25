@@ -1,0 +1,944 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "vus-adf-prod"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ASA FULL PIPELINE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "START SYNAPSE",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "RESUME SYNAPSE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SET START BATCH TIME",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "SCALE UP DB",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "START_BATCH_TIME",
+							"value": {
+								"value": "@formatDateTime(addhours(utcnow(), 7), 'dd-MM-yyyy HH:mm:ss')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "START BATCH",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SET START BATCH TIME",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_etl_start_batch]",
+								"storedProcedureParameters": {
+									"p_batch_type_id": {
+										"type": "Int32",
+										"value": "0"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "A"
+								}
+							}
+						}
+					},
+					{
+						"name": "GET BATCH_ID",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "START BATCH",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "BATCH_ID",
+							"value": {
+								"value": "@string(activity('START BATCH').output.firstrow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "END BATCH",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "VUS_PLP",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[ADF].[proc_etl_end_batch]",
+							"storedProcedureParameters": {
+								"p_batch_id": {
+									"value": {
+										"value": "@variables('BATCH_ID')",
+										"type": "Expression"
+									},
+									"type": "Int64"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_DWH_SYNAPSE_DEV",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "REFRESH AS",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "END BATCH",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS GENERAL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "PAUSE SYNAPSE",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SCALE DOWN DB",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "PAUSE SYNAPSE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SDE_ASA",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "GET BATCH_ID",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE_ASA",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_SIL_ASA",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SDE_ASA",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_ASA",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_PLP",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SIL_ASA",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_PLP",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SCALE UP DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "START SYNAPSE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE UP DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SCALE DOWN DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "REFRESH AS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE DOWN DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "START SYNAPSE",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "SCALE UP DB",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "SET START BATCH TIME",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "START BATCH",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "GET BATCH_ID",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "VUS_SDE_ASA",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "VUS_SIL_ASA",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "VUS_PLP",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "END BATCH",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "REFRESH AS",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "SCALE DOWN DB",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "PAUSE SYNAPSE",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SEND SUCCESS EMAIL",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "PAUSE SYNAPSE",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND SUCCESS EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"BATCH_ID": {
+						"type": "String",
+						"defaultValue": "0"
+					},
+					"CURRENT_DATA_TIME": {
+						"type": "String"
+					},
+					"START_BATCH_TIME": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "VUS MASTER"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-07-31T04:02:58Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUS_ETL_MASTER')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SDE",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SDE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BATCH_ID": {
+									"value": "@pipeline().parameters.BATCH_ID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SIL",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SDE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"BATCH_ID": {
+									"value": "@pipeline().parameters.BATCH_ID",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SIL GENERAL",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SIL",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_SIL_GENERAL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_PLP",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SIL GENERAL",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_PLP",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE ETL MASTER",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SDE",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "SIL",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "SIL GENERAL",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "VUS_PLP",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"BATCH_ID": {
+						"type": "string",
+						"defaultValue": "19000101"
+					}
+				},
+				"folder": {
+					"name": "VUS_ETL"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-06-06T15:40:34Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MASTER PIPELINE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "START SYNAPSE",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "RESUME SYNAPSE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"resourceGroups": "DWCLOUD-Prod",
+								"servers": "vus-synapseprod-ws",
+								"databases": "VUSDWHPRO"
+							}
+						}
+					},
+					{
+						"name": "SET START BATCH TIME",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "SCALE UP DB",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "START_BATCH_TIME",
+							"value": {
+								"value": "@formatDateTime(addhours(utcnow(), 7), 'dd-MM-yyyy HH:mm:ss')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "START BATCH",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SET START BATCH TIME",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlDWSource",
+								"sqlReaderStoredProcedureName": "[[ADF].[proc_etl_start_batch]",
+								"storedProcedureParameters": {
+									"p_batch_type_id": {
+										"type": "Int32",
+										"value": "0"
+									}
+								},
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "DS_DWH_SYNAPSE_ADF",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "A"
+								}
+							}
+						}
+					},
+					{
+						"name": "GET BATCH_ID",
+						"type": "SetVariable",
+						"dependsOn": [
+							{
+								"activity": "START BATCH",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "BATCH_ID",
+							"value": {
+								"value": "@string(activity('START BATCH').output.firstrow.AAA)",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "END BATCH",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "VUS_ETL_MASTER",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[ADF].[proc_etl_end_batch]",
+							"storedProcedureParameters": {
+								"p_batch_id": {
+									"value": {
+										"value": "@variables('BATCH_ID')",
+										"type": "Expression"
+									},
+									"type": "Int64"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_DWH_SYNAPSE_DEV",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "REFRESH AS",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "END BATCH",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "REFRESH AS GENERAL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "PAUSE SYNAPSE",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SCALE DOWN DB",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "PAUSE SYNAPSE",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "VUS_ETL_MASTER",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "GET BATCH_ID",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "VUS_ETL_MASTER",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "SCALE UP DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "START SYNAPSE",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE UP DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"databases": "VUSDWHPRO",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-Prod",
+								"Servers": "vus-synapseprod-ws"
+							}
+						}
+					},
+					{
+						"name": "SCALE DOWN DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "REFRESH AS",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SCALE DOWN DB",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"databases": "VUSDWHPRO",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-Prod",
+								"Servers": "vus-synapseprod-ws"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"BATCH_ID": {
+						"type": "String",
+						"defaultValue": "0"
+					},
+					"CURRENT_DATA_TIME": {
+						"type": "String"
+					},
+					"START_BATCH_TIME": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "VUS MASTER"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-07-31T04:02:58Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/VUS_ETL_MASTER')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/12h15')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ASA FULL PIPELINE",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-05-31T15:18:00",
+						"timeZone": "SE Asia Standard Time",
+						"schedule": {
+							"minutes": [
+								15
+							],
+							"hours": [
+								12
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ASA FULL PIPELINE')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/2AM')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "MASTER PIPELINE",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-12-05T14:38:00",
+						"timeZone": "SE Asia Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								2
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/MASTER PIPELINE')]"
+			]
+		}
+	]
+}

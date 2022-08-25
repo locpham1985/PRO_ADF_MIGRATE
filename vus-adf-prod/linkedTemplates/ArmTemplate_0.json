@@ -1,0 +1,1354 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "vus-adf-prod"
+		},
+		"LS_DWH_SYNAPSE_DEV_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_DWH_SYNAPSE_DEV'"
+		},
+		"LS_STORAGE_ACCOUNT_DEV_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_STORAGE_ACCOUNT_DEV'"
+		},
+		"Synapse Prod_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Synapse Prod'"
+		},
+		"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/d607421b-81ca-426a-8942-2fd12f5c9611/resourcegroups/DWCLOUD-Prod/providers/Microsoft.DataFactory/factories/vus-adf-prod/integrationruntimes/IR-PROD"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PAUSE SYNAPSE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Azure Synapse State",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'?api-version=2019-06-01-preview')\n",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "Wait 5 seconds",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Get Azure Synapse State",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 5
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Wait 5 seconds",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(activity('Get Azure Synapse State').output.properties.status,'Online')",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Pause Azure Synapse",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'/pause?api-version=2019-06-01-preview')\n",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "{}",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"subscriptions": {
+						"type": "string",
+						"defaultValue": "d607421b-81ca-426a-8942-2fd12f5c9611"
+					},
+					"resourceGroups": {
+						"type": "string",
+						"defaultValue": "DWCLOUD-Prod"
+					},
+					"servers": {
+						"type": "string",
+						"defaultValue": "vus-synapseprod-ws"
+					},
+					"databases": {
+						"type": "string",
+						"defaultValue": "VUSDWHPRO"
+					}
+				},
+				"folder": {
+					"name": "AZURE SYNAPSE"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-11-30T05:20:57Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/REFRESH AS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Login",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://login.microsoftonline.com/',pipeline().parameters.TenantID,'/oauth2/token')",
+								"type": "Expression"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded"
+							},
+							"body": {
+								"value": "@concat('grant_type=client_credentials&resource=https://',pipeline().parameters.Region,'.asazure.windows.net&client_id=',pipeline().parameters.ClientID,'&client_secret=',encodeUriComponent(pipeline().parameters.ClientSecret))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "UntilRefreshComplete",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "FilterToCurrentRefresh",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals(activity('GetAzureASRefreshStatus').output.status,'inProgress'))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetAzureASRefreshStatus",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Wait30Seconds",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://',pipeline().parameters.Region,'.asazure.windows.net/servers/',pipeline().parameters.Server,'/models/',pipeline().parameters.DatabaseName,'/refreshes/',activity('FilterToCurrentRefresh').output.Value[0].refreshId)",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {
+											"Authorization": {
+												"value": "@concat(string(activity('Login').output.token_type),' ',string(activity('Login').output.access_token))",
+												"type": "Expression"
+											}
+										}
+									}
+								},
+								{
+									"name": "Wait30Seconds",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 30
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "FilterToCurrentRefresh",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "GetAzureASRefreshes",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@json(activity('GetAzureASRefreshes').output.Response)",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@greaterOrEquals(item().startTime,addseconds(activity('StartProcessingAzureAS').output.startTime,-180))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "StartProcessingAzureAS",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Login",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://',pipeline().parameters.Region,'.asazure.windows.net/servers/',pipeline().parameters.Server,'/models/',pipeline().parameters.DatabaseName,'/refreshes')",
+								"type": "Expression"
+							},
+							"method": "POST",
+							"headers": {
+								"Authorization": {
+									"value": "@concat(string(activity('Login').output.token_type),' ',string(activity('Login').output.access_token))",
+									"type": "Expression"
+								}
+							},
+							"body": {
+								"value": "@pipeline().parameters.RefreshRequestBody",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "IfFailed",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "UntilRefreshComplete",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(activity('GetAzureASRefreshStatus').output.status,'failed')",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "ThrowErrorOnFailure",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@string(activity('GetAzureASRefreshStatus').output)",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "GetAzureASRefreshes",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "StartProcessingAzureAS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 180,
+							"secureOutput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://',pipeline().parameters.Region,'.asazure.windows.net/servers/',pipeline().parameters.Server,'/models/',pipeline().parameters.DatabaseName,'/refreshes')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {
+								"Authorization": {
+									"value": "@concat(string(activity('Login').output.token_type),' ',string(activity('Login').output.access_token))",
+									"type": "Expression"
+								}
+							},
+							"body": {
+								"Type": "Full",
+								"CommitMode": "transactional",
+								"MaxParallelism": 10,
+								"RetryCount": 2
+							}
+						}
+					}
+				],
+				"concurrency": 3,
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"TenantID": {
+						"type": "String",
+						"defaultValue": "d1005fc5-bff9-42d5-81e5-1f3fcb089799"
+					},
+					"ClientID": {
+						"type": "String",
+						"defaultValue": "cadb53c2-c5c0-4b79-a027-122695b8750f"
+					},
+					"ClientSecret": {
+						"type": "String",
+						"defaultValue": "Av97Q~Mi4ozuSErmdWEjS1kJeYh5UUsATKbwT"
+					},
+					"Region": {
+						"type": "String",
+						"defaultValue": "southeastasia"
+					},
+					"Server": {
+						"type": "String",
+						"defaultValue": "vusdwhasprod"
+					},
+					"DatabaseName": {
+						"type": "String",
+						"defaultValue": "VUSBI"
+					},
+					"RefreshRequestBody": {
+						"type": "string",
+						"defaultValue": {
+							"Type": "Full",
+							"CommitMode": "transactional",
+							"MaxParallelism": 10,
+							"RetryCount": 2,
+							"Objects": []
+						}
+					}
+				},
+				"folder": {
+					"name": "AZURE AS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-12-05T14:08:23Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RESUME AS')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IfAzureASPaused",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "CheckIfAzureASSuspended",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals('Succeeded',string(activity('CheckIfAzureASSuspended').output.properties.state)))",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "ResumeAzureAS",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.AnalysisServices/servers/',pipeline().parameters.ServerName,'/resume?api-version=2016-05-16')",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "@null",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.azure.com"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "CheckIfAzureASSuspended",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.AnalysisServices/servers/',pipeline().parameters.ServerName,'?api-version=2016-05-16')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "UntilAzureASResumed",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "IfAzureASPaused",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals('Succeeded',string(activity('CheckAzureASStatus').output.properties.state))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "CheckAzureASStatus",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.AnalysisServices/servers/',pipeline().parameters.ServerName,'?api-version=2016-05-16')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.azure.com"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"TenantID": {
+						"type": "String",
+						"defaultValue": "d1005fc5-bff9-42d5-81e5-1f3fcb089799"
+					},
+					"SubscriptionID": {
+						"type": "String",
+						"defaultValue": "d607421b-81ca-426a-8942-2fd12f5c9611"
+					},
+					"ResourceGroup": {
+						"type": "String",
+						"defaultValue": "DWCLOUD-Prod"
+					},
+					"ServerName": {
+						"type": "String",
+						"defaultValue": "vusdwhasprod"
+					}
+				},
+				"folder": {
+					"name": "AZURE AS"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-11-30T06:25:27Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RESUME SYNAPSE')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Azure Synapse State",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'?api-version=2019-06-01-preview')\n",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "Wait 5 seconds",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "Get Azure Synapse State",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 5
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Wait 5 seconds",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(activity('Get Azure Synapse State').output.properties.status,'Paused')",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Resume Azure Synapse",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'/resume?api-version=2019-06-01-preview')\n",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "{}",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"subscriptions": {
+						"type": "string",
+						"defaultValue": "d607421b-81ca-426a-8942-2fd12f5c9611"
+					},
+					"resourceGroups": {
+						"type": "string",
+						"defaultValue": "DWCLOUD-Prod"
+					},
+					"servers": {
+						"type": "string",
+						"defaultValue": "vus-synapseprod-ws"
+					},
+					"databases": {
+						"type": "string",
+						"defaultValue": "VUSDWHPRO"
+					}
+				},
+				"folder": {
+					"name": "AZURE SYNAPSE"
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-11-30T05:20:44Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SCALE DOWN DB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SCALE DB",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'?api-version=2021-06-01-preview')",
+								"type": "Expression"
+							},
+							"method": "PUT",
+							"headers": {
+								"Content-Type": "application/json; charset=UTF-8"
+							},
+							"body": {
+								"value": "{\n\tlocation: \"Southeast Asia\",\n    \"sku\": {\n    \"name\": \"DW100c\"\n            }\n}",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"databases": {
+						"type": "string",
+						"defaultValue": "VUSDWHDEV"
+					},
+					"Subscriptions": {
+						"type": "string",
+						"defaultValue": "d607421b-81ca-426a-8942-2fd12f5c9611"
+					},
+					"ResourceGroups": {
+						"type": "string",
+						"defaultValue": "DWCLOUD-DEV"
+					},
+					"Servers": {
+						"type": "string",
+						"defaultValue": "vus-synapse-ws"
+					}
+				},
+				"folder": {
+					"name": "AZURE SYNAPSE"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-07-31T04:04:40Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SCALE UP DB')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SCALE DB",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.subscriptions,'/resourceGroups/',pipeline().parameters.resourceGroups,'/providers/Microsoft.Synapse/workspaces/',pipeline().parameters.servers,'/sqlPools/',pipeline().parameters.databases,'?api-version=2021-06-01-preview')",
+								"type": "Expression"
+							},
+							"method": "PUT",
+							"headers": {
+								"Content-Type": "application/json; charset=UTF-8"
+							},
+							"body": {
+								"value": "{\n\tlocation: \"Southeast Asia\",\n    \"sku\": {\n    \"name\": \"DW200c\"\n            }\n}",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"databases": {
+						"type": "string",
+						"defaultValue": "VUSDWHDEV"
+					},
+					"Subscriptions": {
+						"type": "string",
+						"defaultValue": "d607421b-81ca-426a-8942-2fd12f5c9611"
+					},
+					"ResourceGroups": {
+						"type": "string",
+						"defaultValue": "DWCLOUD-DEV"
+					},
+					"Servers": {
+						"type": "string",
+						"defaultValue": "vus-synapse-ws"
+					}
+				},
+				"folder": {
+					"name": "AZURE SYNAPSE"
+				},
+				"annotations": [],
+				"lastPublishTime": "2022-07-31T04:04:40Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SEND ERROR EMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "[[The etl error]"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "@pipeline().DataFactory"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "@pipeline().Pipeline"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Fail"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Done !"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_DWH_SYNAPSE_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_DWH_SYNAPSE_DEV_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_STORAGE_ACCOUNT_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_STORAGE_ACCOUNT_DEV_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Synapse Prod')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('Synapse Prod_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-PROD')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-Share')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {
+					"linkedInfo": {
+						"resourceId": "[parameters('IR-Share_properties_typeProperties_linkedInfo_resourceId')]",
+						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUSIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SEND SUCCESS EMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "[[The etl success]"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "@pipeline().DataFactory"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "@pipeline().Pipeline"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Success"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Done !"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DWH_SYNAPSE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DWH_SYNAPSE_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "SYNAPSE"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DWH_SYNAPSE_ADF')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DWH_SYNAPSE_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "SYNAPSE"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "ADF",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DWH_SYNAPSE_STAGING')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DWH_SYNAPSE_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "SYNAPSE"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "STG",
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_36i')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DWH_SYNAPSE_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "JOB_ID",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "JOB_NAME",
+						"type": "varchar"
+					},
+					{
+						"name": "JOB_DESC",
+						"type": "varchar"
+					},
+					{
+						"name": "JOB_GROUP",
+						"type": "varchar"
+					},
+					{
+						"name": "JOB_SUB_GROUP",
+						"type": "varchar"
+					},
+					{
+						"name": "JOB_TYPE",
+						"type": "varchar"
+					},
+					{
+						"name": "SOURCE_SCHEMA",
+						"type": "varchar"
+					},
+					{
+						"name": "SOURCE_TABLE",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TARGET_SCHEMA",
+						"type": "varchar"
+					},
+					{
+						"name": "TARGET_TABLE",
+						"type": "varchar"
+					},
+					{
+						"name": "JOB_SCRIPT",
+						"type": "nvarchar"
+					},
+					{
+						"name": "PRUNE_DAYS",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FULL_LOAD_FLG",
+						"type": "char"
+					},
+					{
+						"name": "DATASOURCE_NUM_ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "ACTIVE_FLG",
+						"type": "char"
+					},
+					{
+						"name": "CREATED_TS",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "LAST_UPDATED_TS",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "JOB_ORDER",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "INTEGRATION_ID",
+						"type": "varchar"
+					},
+					{
+						"name": "INTEGRATION_COL",
+						"type": "varchar"
+					},
+					{
+						"name": "INTEGRATION_ORDER_COL",
+						"type": "varchar"
+					},
+					{
+						"name": "INCREMENTAL_COL",
+						"type": "nvarchar"
+					},
+					{
+						"name": "truncate_flag",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "ADF",
+					"table": "ETL_JOB_20220704"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_xdx')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DWH_SYNAPSE_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SRC_EXCEL"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "Azure Blob Storage file"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/EXCEL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FILE_NAME": {
+						"type": "string"
+					},
+					"SHEET_NAME": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "SRC_EXCEL"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "RLS",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "BI_RLS.xlsx",
+						"container": "manual"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_STORAGE_ACCOUNT_DEV')]"
+			]
+		}
+	]
+}
