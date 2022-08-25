@@ -177,6 +177,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Send Notification",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "START SYNAPSE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Send Notification",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
