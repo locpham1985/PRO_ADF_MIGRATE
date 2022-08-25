@@ -359,7 +359,7 @@
 				}
 			},
 			{
-				"name": "SEND SUCCESS MESSAGE",
+				"name": "SEND SUCCESS EMAIL",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -372,7 +372,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "SEND ERROR EMAIL",
+						"referenceName": "SEND SUCCESS EMAIL",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
