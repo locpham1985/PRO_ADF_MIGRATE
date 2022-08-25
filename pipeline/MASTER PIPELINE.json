@@ -251,7 +251,7 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
