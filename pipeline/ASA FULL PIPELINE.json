@@ -271,6 +271,92 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "SEND EMAIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "START SYNAPSE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "SCALE UP DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "SET START BATCH TIME",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "START BATCH",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "GET BATCH_ID",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_SDE_ASA",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_SIL_ASA",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_PLP",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "END BATCH",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "REFRESH AS",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "SCALE DOWN DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "PAUSE SYNAPSE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
