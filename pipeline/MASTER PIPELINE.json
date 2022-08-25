@@ -195,7 +195,22 @@
 						"referenceName": "Send Notification",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"DataFactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						},
+						"Status": "\"Success\"",
+						"SuccessMessage": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
