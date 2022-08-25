@@ -51,7 +51,7 @@
 			},
 			"Status": {
 				"type": "string",
-				"defaultValue": "Error"
+				"defaultValue": "Fail"
 			},
 			"SuccessMessage": {
 				"type": "string",
