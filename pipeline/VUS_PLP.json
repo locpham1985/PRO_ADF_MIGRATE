@@ -110,6 +110,50 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "SEND ERROR MESAGE PLP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_PLP_GROUP_00",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_PLP_GROUP_01",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "REBUILD INDEX",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_PLP_GROUP_02",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "VUS_PLP_GROUP_03",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {
