@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "VUS-adf-dev"
 		},
+		"LMS_API_ILE_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LMS_API_ILE'"
+		},
+		"LMS_API_YL_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LMS_API_YL'"
+		},
 		"LS_DWH_SYNAPSE_DEV_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_DWH_SYNAPSE_DEV'"
@@ -22,6 +30,22 @@
 		"TQMCONNECTION_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TQMCONNECTION'"
+		},
+		"LMS_API_ILE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_ile_scores"
+		},
+		"LMS_API_ILE_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "connect_user"
+		},
+		"LMS_API_YL_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_yl_scores"
+		},
+		"LMS_API_YL_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "connect_user"
 		},
 		"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
@@ -3016,6 +3040,76 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Send Notification')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "ADF"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "ADF"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Success"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/VUS_ETL_MASTER')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -3107,6 +3201,46 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "Notification Error",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SDE",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Send Notification",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"DataFactoryName": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								},
+								"EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
+								"ErrorMessage": {
+									"value": "@activity('SDE').Error.message",
+									"type": "Expression"
+								},
+								"PipelineName": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								},
+								"Status": "Success",
+								"SuccessMessage": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -3129,7 +3263,8 @@
 				"[concat(variables('factoryId'), '/pipelines/VUS_SDE')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_SIL')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GENERAL')]",
-				"[concat(variables('factoryId'), '/pipelines/VUS_PLP')]"
+				"[concat(variables('factoryId'), '/pipelines/VUS_PLP')]",
+				"[concat(variables('factoryId'), '/pipelines/Send Notification')]"
 			]
 		},
 		{
@@ -10709,6 +10844,56 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Data_ILE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LMS_API_ILE",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"para_date": "2022-08-04",
+						"para_type": "ile"
+					}
+				},
+				"folder": {
+					"name": "SRC_API"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LMS_API_ILE')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Data_YL')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LMS_API_YL",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"para_date": "2022-08-04",
+						"para_type": "YL"
+					}
+				},
+				"folder": {
+					"name": "SRC_API"
+				},
+				"annotations": [],
+				"type": "RestResource",
+				"typeProperties": {},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LMS_API_YL')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DestinationDataset_36i')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -11274,6 +11459,66 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/LMS_API_ILE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"para_date": {
+						"type": "string",
+						"defaultValue": "2022-08-04"
+					},
+					"para_type": {
+						"type": "string",
+						"defaultValue": "ile"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LMS_API_ILE_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('LMS_API_ILE_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LMS_API_ILE_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LMS_API_YL')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"para_date": {
+						"type": "string",
+						"defaultValue": "2022-08-04"
+					},
+					"para_type": {
+						"type": "string",
+						"defaultValue": "YL"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LMS_API_YL_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('LMS_API_YL_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LMS_API_YL_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_DWH_SYNAPSE_DEV')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -11337,16 +11582,8 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "ASA FULL PIPELINE",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
+				"runtimeState": "Stopped",
+				"pipelines": [],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
@@ -11365,9 +11602,7 @@
 					}
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/ASA FULL PIPELINE')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/2AM')]",
@@ -11375,16 +11610,8 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "MASTER PIPELINE",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
+				"runtimeState": "Stopped",
+				"pipelines": [],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
@@ -11403,9 +11630,7 @@
 					}
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/MASTER PIPELINE')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/4AM')]",

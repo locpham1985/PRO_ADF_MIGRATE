@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "VUS-adf-dev"
 		},
+		"LMS_API_ILE_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LMS_API_ILE'"
+		},
+		"LMS_API_YL_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LMS_API_YL'"
+		},
 		"LS_DWH_SYNAPSE_DEV_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_DWH_SYNAPSE_DEV'"
@@ -18,6 +26,22 @@
 		"Synapse Prod_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'Synapse Prod'"
+		},
+		"LMS_API_ILE_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_ile_scores"
+		},
+		"LMS_API_ILE_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "connect_user"
+		},
+		"LMS_API_YL_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://lxp.vus.edu.vn/ords/connect/mis/lms_final_yl_scores"
+		},
+		"LMS_API_YL_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "connect_user"
 		},
 		"IR-Share_properties_typeProperties_linkedInfo_resourceId": {
 			"type": "string",
@@ -860,6 +884,136 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Send Notification')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "ADF"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "ADF"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Success"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LMS_API_ILE')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"para_date": {
+						"type": "string",
+						"defaultValue": "2022-08-04"
+					},
+					"para_type": {
+						"type": "string",
+						"defaultValue": "ile"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LMS_API_ILE_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('LMS_API_ILE_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LMS_API_ILE_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LMS_API_YL')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"parameters": {
+					"para_date": {
+						"type": "string",
+						"defaultValue": "2022-08-04"
+					},
+					"para_type": {
+						"type": "string",
+						"defaultValue": "YL"
+					}
+				},
+				"annotations": [],
+				"type": "RestService",
+				"typeProperties": {
+					"url": "[parameters('LMS_API_YL_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('LMS_API_YL_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LMS_API_YL_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/LS_DWH_SYNAPSE_DEV')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -894,6 +1048,62 @@
 				"type": "AzureSqlDW",
 				"typeProperties": {
 					"connectionString": "[parameters('Synapse Prod_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/12h15')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-05-31T15:18:00",
+						"timeZone": "SE Asia Standard Time",
+						"schedule": {
+							"minutes": [
+								15
+							],
+							"hours": [
+								12
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/2AM')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2021-12-05T14:38:00",
+						"timeZone": "SE Asia Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								2
+							]
+						}
+					}
 				}
 			},
 			"dependsOn": []
@@ -1026,499 +1236,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_36i')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DWH_SYNAPSE_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "JOB_ID",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "JOB_NAME",
-						"type": "varchar"
-					},
-					{
-						"name": "JOB_DESC",
-						"type": "varchar"
-					},
-					{
-						"name": "JOB_GROUP",
-						"type": "varchar"
-					},
-					{
-						"name": "JOB_SUB_GROUP",
-						"type": "varchar"
-					},
-					{
-						"name": "JOB_TYPE",
-						"type": "varchar"
-					},
-					{
-						"name": "SOURCE_SCHEMA",
-						"type": "varchar"
-					},
-					{
-						"name": "SOURCE_TABLE",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TARGET_SCHEMA",
-						"type": "varchar"
-					},
-					{
-						"name": "TARGET_TABLE",
-						"type": "varchar"
-					},
-					{
-						"name": "JOB_SCRIPT",
-						"type": "nvarchar"
-					},
-					{
-						"name": "PRUNE_DAYS",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FULL_LOAD_FLG",
-						"type": "char"
-					},
-					{
-						"name": "DATASOURCE_NUM_ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "ACTIVE_FLG",
-						"type": "char"
-					},
-					{
-						"name": "CREATED_TS",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "LAST_UPDATED_TS",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "JOB_ORDER",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "INTEGRATION_ID",
-						"type": "varchar"
-					},
-					{
-						"name": "INTEGRATION_COL",
-						"type": "varchar"
-					},
-					{
-						"name": "INTEGRATION_ORDER_COL",
-						"type": "varchar"
-					},
-					{
-						"name": "INCREMENTAL_COL",
-						"type": "nvarchar"
-					},
-					{
-						"name": "truncate_flag",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "ADF",
-					"table": "ETL_JOB_20220704"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_xdx')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DWH_SYNAPSE_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "SRC_EXCEL"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [],
-				"typeProperties": {
-					"table": "Azure Blob Storage file"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DWH_SYNAPSE_DEV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/EXCEL')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"FILE_NAME": {
-						"type": "string"
-					},
-					"SHEET_NAME": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "SRC_EXCEL"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "RLS",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "BI_RLS.xlsx",
-						"container": "manual"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_STORAGE_ACCOUNT_DEV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_36i')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Sheet2",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "ETL_JOB_with NOLOCK.xlsx",
-						"container": "manual"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "JOB_ID",
-						"type": "String"
-					},
-					{
-						"name": "JOB_NAME",
-						"type": "String"
-					},
-					{
-						"name": "JOB_DESC",
-						"type": "String"
-					},
-					{
-						"name": "JOB_GROUP",
-						"type": "String"
-					},
-					{
-						"name": "JOB_SUB_GROUP",
-						"type": "String"
-					},
-					{
-						"name": "JOB_TYPE",
-						"type": "String"
-					},
-					{
-						"name": "SOURCE_SCHEMA",
-						"type": "String"
-					},
-					{
-						"name": "SOURCE_TABLE",
-						"type": "String"
-					},
-					{
-						"name": "TARGET_SCHEMA",
-						"type": "String"
-					},
-					{
-						"name": "TARGET_TABLE",
-						"type": "String"
-					},
-					{
-						"name": "JOB_SCRIPT",
-						"type": "String"
-					},
-					{
-						"name": "PRUNE_DAYS",
-						"type": "String"
-					},
-					{
-						"name": "FULL_LOAD_FLG",
-						"type": "String"
-					},
-					{
-						"name": "DATASOURCE_NUM_ID",
-						"type": "String"
-					},
-					{
-						"name": "ACTIVE_FLG",
-						"type": "String"
-					},
-					{
-						"name": "CREATED_TS",
-						"type": "String"
-					},
-					{
-						"name": "LAST_UPDATED_TS",
-						"type": "String"
-					},
-					{
-						"name": "JOB_ORDER",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_ID",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_COL",
-						"type": "String"
-					},
-					{
-						"name": "INTEGRATION_ORDER_COL",
-						"type": "String"
-					},
-					{
-						"name": "INCREMENTAL_COL",
-						"type": "String"
-					},
-					{
-						"name": "truncate_flag",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_STORAGE_ACCOUNT_DEV')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_xdx')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_STORAGE_ACCOUNT_DEV",
-					"type": "LinkedServiceReference"
-				},
-				"folder": {
-					"name": "SRC_EXCEL"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "calendar.csv",
-						"container": "manual"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "DATE_KEY",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_KEY",
-						"type": "String"
-					},
-					{
-						"name": "DATE_NAME",
-						"type": "String"
-					},
-					{
-						"name": "FULL_DATE_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "DAY_SUFFIX",
-						"type": "String"
-					},
-					{
-						"name": "DAY_NAME",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_IN_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_WEEK_IN_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "WEEK_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "MONTH",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_NAME",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "QUARTER_NAME",
-						"type": "String"
-					},
-					{
-						"name": "YEAR",
-						"type": "String"
-					},
-					{
-						"name": "YEAR_NAME",
-						"type": "String"
-					},
-					{
-						"name": "MONTH_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "MMYYYY",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_MONTH",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_QUARTER",
-						"type": "String"
-					},
-					{
-						"name": "FIRST_DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "LAST_DAY_OF_YEAR",
-						"type": "String"
-					},
-					{
-						"name": "IS_WEEKDAY",
-						"type": "String"
-					},
-					{
-						"name": "IS_HOLIDAY_VN",
-						"type": "String"
-					},
-					{
-						"name": "HOLIDAY_VN",
-						"type": "String"
-					},
-					{
-						"name": "DAY_TYPE",
-						"type": "String"
-					},
-					{
-						"name": "W_INTEGRATION_ID",
-						"type": "String"
-					},
-					{
-						"name": "W_DELETE_FLG",
-						"type": "String"
-					},
-					{
-						"name": "W_INSERT_DT",
-						"type": "String"
-					},
-					{
-						"name": "W_UPDATE_DT",
-						"type": "String"
-					},
-					{
-						"name": "W_DATASOURCE_NUM_ID",
-						"type": "String"
-					},
-					{
-						"name": "W_BATCH_ID",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_STORAGE_ACCOUNT_DEV')]"
 			]
 		}
 	]
