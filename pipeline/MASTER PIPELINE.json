@@ -205,7 +205,7 @@
 							"value": "@pipeline().Pipeline",
 							"type": "Expression"
 						},
-						"Status": "\"Success\"",
+						"Status": "Success",
 						"SuccessMessage": {
 							"value": "@pipeline().Pipeline",
 							"type": "Expression"
