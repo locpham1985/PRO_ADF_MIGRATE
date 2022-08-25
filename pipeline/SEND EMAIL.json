@@ -55,7 +55,7 @@
 			},
 			"SuccessMessage": {
 				"type": "string",
-				"defaultValue": "Success"
+				"defaultValue": "Done !"
 			}
 		},
 		"annotations": []
