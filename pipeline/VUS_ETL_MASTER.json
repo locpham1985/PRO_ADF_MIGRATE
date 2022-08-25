@@ -1,137 +1,144 @@
 {
-    "name": "VUS_ETL_MASTER",
-    "properties": {
-        "activities": [{
-                "name": "SDE",
-                "type": "ExecutePipeline",
-                "dependsOn": [],
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "VUS_SDE",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true,
-                    "parameters": {
-                        "BATCH_ID": {
-                            "value": "@pipeline().parameters.BATCH_ID",
-                            "type": "Expression"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "SIL",
-                "type": "ExecutePipeline",
-                "dependsOn": [{
-                    "activity": "SDE",
-                    "dependencyConditions": [
-                        "Completed"
-                    ]
-                }],
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "VUS_SIL",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true,
-                    "parameters": {
-                        "BATCH_ID": {
-                            "value": "@pipeline().parameters.BATCH_ID",
-                            "type": "Expression"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "SIL GENERAL",
-                "type": "ExecutePipeline",
-                "dependsOn": [{
-                    "activity": "SIL",
-                    "dependencyConditions": [
-                        "Completed"
-                    ]
-                }],
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "VUS_SIL_GENERAL",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true
-                }
-            },
-            {
-                "name": "VUS_PLP",
-                "type": "ExecutePipeline",
-                "dependsOn": [{
-                    "activity": "SIL GENERAL",
-                    "dependencyConditions": [
-                        "Completed"
-                    ]
-                }],
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "VUS_PLP",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true
-                }
-                /*Loc them */
-            },
-            {
-                "name": "Notification Error",
-                "type": "ExecutePipeline",
-                "dependsOn": [{
-                    "activity": "SDE",
-                    "dependencyConditions": [
-                        "Failed"
-                    ]
-                }],
-                "userProperties": [],
-                "typeProperties": {
-                    "pipeline": {
-                        "referenceName": "SEND EMAIL",
-                        "type": "PipelineReference"
-                    },
-                    "waitOnCompletion": true,
-                    "parameters": {
-                        "DataFactoryName": {
-                            "value": "@pipeline().DataFactory",
-                            "type": "Expression"
-                        },
-                        "EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
-                        "ErrorMessage": {
-                            "value": "@activity('SDE').Error.message",
-                            "type": "Expression"
-                        },
-                        "PipelineName": {
-                            "value": "@pipeline().Pipeline",
-                            "type": "Expression"
-                        },
-                        "Status": "Success",
-                        "SuccessMessage": {
-                            "value": "@pipeline().Pipeline",
-                            "type": "Expression"
-                        }
-                    }
-                }
-            }
-            /*Loc them */
-        ],
-        "parameters": {
-            "BATCH_ID": {
-                "type": "string",
-                "defaultValue": "19000101"
-            }
-        },
-        "folder": {
-            "name": "VUS_ETL"
-        },
-        "annotations": [],
-        "lastPublishTime": "2022-06-06T15:40:34Z"
-    },
-    "type": "Microsoft.DataFactory/factories/pipelines"
+	"name": "VUS_ETL_MASTER",
+	"properties": {
+		"activities": [
+			{
+				"name": "SDE",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_SDE",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"BATCH_ID": {
+							"value": "@pipeline().parameters.BATCH_ID",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SDE",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_SIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"BATCH_ID": {
+							"value": "@pipeline().parameters.BATCH_ID",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SIL GENERAL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SIL",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_SIL_GENERAL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "VUS_PLP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SIL GENERAL",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "VUS_PLP",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Notification Error",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SDE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"DataFactoryName": {
+							"value": "@pipeline().DataFactory",
+							"type": "Expression"
+						},
+						"EmailTo": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn",
+						"ErrorMessage": {
+							"value": "@activity('SDE').Error.message",
+							"type": "Expression"
+						},
+						"PipelineName": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						},
+						"Status": "Success",
+						"SuccessMessage": {
+							"value": "@pipeline().Pipeline",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"BATCH_ID": {
+				"type": "string",
+				"defaultValue": "19000101"
+			}
+		},
+		"folder": {
+			"name": "VUS_ETL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-06-06T15:40:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
