@@ -273,7 +273,7 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -346,6 +346,26 @@
 						"activity": "PAUSE SYNAPSE",
 						"dependencyConditions": [
 							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SEND SUCCESS MESSAGE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PAUSE SYNAPSE",
+						"dependencyConditions": [
+							"Succeeded"
 						]
 					}
 				],
