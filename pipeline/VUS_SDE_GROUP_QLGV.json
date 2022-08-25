@@ -464,6 +464,32 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE QLGV",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Lookup_SRC_List",
+						"dependencyConditions": [
+							"Failed"
+						]
+					},
+					{
+						"activity": "ForEach",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {
