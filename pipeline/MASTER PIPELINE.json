@@ -251,7 +251,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESSAGE",
+				"name": "SEND ERROR MESSAGE MASTER PIPELINE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
