@@ -29,6 +29,220 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/SEND ERROR EMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "[[The etl error]"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "@pipeline().DataFactory"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "@pipeline().Pipeline"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Fail"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Done !"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SEND SUCCESS EMAIL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Send Mail",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "00:00:10",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
+								"type": "Expression"
+							},
+							"disableCertValidation": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Title": {
+						"type": "string",
+						"defaultValue": "[[The etl success]"
+					},
+					"DataFactoryName": {
+						"type": "string",
+						"defaultValue": "@pipeline().DataFactory"
+					},
+					"EmailTo": {
+						"type": "string",
+						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
+					},
+					"ErrorMessage": {
+						"type": "string",
+						"defaultValue": "Error"
+					},
+					"PipelineName": {
+						"type": "string",
+						"defaultValue": "@pipeline().Pipeline"
+					},
+					"Status": {
+						"type": "string",
+						"defaultValue": "Success"
+					},
+					"SuccessMessage": {
+						"type": "string",
+						"defaultValue": "Done !"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_DWH_SYNAPSE_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_DWH_SYNAPSE_DEV_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_STORAGE_ACCOUNT_DEV')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_STORAGE_ACCOUNT_DEV_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Synapse Prod')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('Synapse Prod_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-PROD')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/IR-Share')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {
+					"linkedInfo": {
+						"resourceId": "[parameters('IR-Share_properties_typeProperties_linkedInfo_resourceId')]",
+						"authorizationType": "Rbac"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VUSIR')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PAUSE SYNAPSE')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -124,6 +338,32 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE SYNAPSE STATE",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Get Azure Synapse State",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -154,7 +394,9 @@
 				"annotations": [],
 				"lastPublishTime": "2021-11-30T05:20:57Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/REFRESH AS')]",
@@ -245,6 +487,32 @@
 									"userProperties": [],
 									"typeProperties": {
 										"waitTimeInSeconds": 30
+									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE GetAzureASRefreshStatus",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "GetAzureASRefreshStatus",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@activity('GetAzureASRefreshStatus').output.errors[0].Message",
+												"type": "Expression"
+											}
+										}
 									}
 								}
 							],
@@ -388,6 +656,110 @@
 								"RetryCount": 2
 							}
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE LOGIN AS",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Login",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Login').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE StartProcessingAzureAS",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "StartProcessingAzureAS",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('StartProcessingAzureAS').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE GetAzureASRefreshes",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "GetAzureASRefreshes",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('GetAzureASRefreshes').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE FilterToCurrentRefresh",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "FilterToCurrentRefresh",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('FilterToCurrentRefresh').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"concurrency": 3,
@@ -437,7 +809,9 @@
 				"annotations": [],
 				"lastPublishTime": "2021-12-05T14:08:23Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RESUME AS')]",
@@ -563,6 +937,32 @@
 							],
 							"timeout": "7.00:00:00"
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE CheckIfAzureASSuspended",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "CheckIfAzureASSuspended",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('CheckIfAzureASSuspended').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -593,7 +993,9 @@
 				"annotations": [],
 				"lastPublishTime": "2021-11-30T06:25:27Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/RESUME SYNAPSE')]",
@@ -691,6 +1093,32 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE SYNAPSE STATE",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Get Azure Synapse State",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -721,7 +1149,9 @@
 				"annotations": [],
 				"lastPublishTime": "2021-11-30T05:20:44Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SCALE DOWN DB')]",
@@ -759,6 +1189,32 @@
 								"resource": "https://management.core.windows.net/"
 							}
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE SCALE DOWN DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SCALE DB",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -789,7 +1245,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-07-31T04:04:40Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/SCALE UP DB')]",
@@ -827,6 +1285,32 @@
 								"resource": "https://management.core.windows.net/"
 							}
 						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE SCALE UP DB",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SCALE DB",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
@@ -857,221 +1341,9 @@
 				"annotations": [],
 				"lastPublishTime": "2022-07-31T04:04:40Z"
 			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SEND ERROR EMAIL')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Send Mail",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "00:00:10",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
-							},
-							"body": {
-								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
-								"type": "Expression"
-							},
-							"disableCertValidation": true
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"Title": {
-						"type": "string",
-						"defaultValue": "[[The etl error]"
-					},
-					"DataFactoryName": {
-						"type": "string",
-						"defaultValue": "@pipeline().DataFactory"
-					},
-					"EmailTo": {
-						"type": "string",
-						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
-					},
-					"ErrorMessage": {
-						"type": "string",
-						"defaultValue": "Error"
-					},
-					"PipelineName": {
-						"type": "string",
-						"defaultValue": "@pipeline().Pipeline"
-					},
-					"Status": {
-						"type": "string",
-						"defaultValue": "Fail"
-					},
-					"SuccessMessage": {
-						"type": "string",
-						"defaultValue": "Done !"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_DWH_SYNAPSE_DEV')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_DWH_SYNAPSE_DEV_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_STORAGE_ACCOUNT_DEV')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('LS_STORAGE_ACCOUNT_DEV_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Synapse Prod')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('Synapse Prod_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/IR-PROD')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/IR-Share')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {
-					"linkedInfo": {
-						"resourceId": "[parameters('IR-Share_properties_typeProperties_linkedInfo_resourceId')]",
-						"authorizationType": "Rbac"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/VUSIR')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SEND SUCCESS EMAIL')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Send Mail",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "00:00:10",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://sendmailoutlook.azurewebsites.net:443/api/SendMail/triggers/manual/invoke?api-version=2022-05-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8KlV47PHrCoK4H80Rrq6aWdoT6ehMoMVuQjDUKJs888",
-							"method": "POST",
-							"headers": {
-								"Content-Type": "application/json"
-							},
-							"body": {
-								"value": "{\"EmailTo\": \"@{pipeline().parameters.EmailTo}\",\"Title\": \"@{pipeline().parameters.Title}\",\"DataFactoryName\": \"@{pipeline().parameters.DataFactoryName}\",\"PipelineName\": \"@{pipeline().parameters.PipelineName}\",\"Status\": \"@{pipeline().parameters.Status}\",\"ErrorMessage\": \"@{pipeline().parameters.ErrorMessage}\",\"SuccessMessage\": \"@{pipeline().parameters.SuccessMessage}\"}",
-								"type": "Expression"
-							},
-							"disableCertValidation": true
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"Title": {
-						"type": "string",
-						"defaultValue": "[[The etl success]"
-					},
-					"DataFactoryName": {
-						"type": "string",
-						"defaultValue": "@pipeline().DataFactory"
-					},
-					"EmailTo": {
-						"type": "string",
-						"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
-					},
-					"ErrorMessage": {
-						"type": "string",
-						"defaultValue": "Error"
-					},
-					"PipelineName": {
-						"type": "string",
-						"defaultValue": "@pipeline().Pipeline"
-					},
-					"Status": {
-						"type": "string",
-						"defaultValue": "Success"
-					},
-					"SuccessMessage": {
-						"type": "string",
-						"defaultValue": "Done !"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/SEND ERROR EMAIL')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_DWH_SYNAPSE')]",

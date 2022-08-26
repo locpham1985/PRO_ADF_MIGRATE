@@ -13,199 +13,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GROUP_QLGV')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Lookup SRC List",
-						"type": "Lookup",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlDWSource",
-								"sqlReaderQuery": "SELECT [JOB_SCRIPT] AS [SRC_LIST], [SOURCE_TABLE] AS [SRC_TBL], [TARGET_TABLE] AS [TGT_TBL] \nFROM [ADF].[ETL_JOB] WHERE ACTIVE_FLG ='Y' and JOB_GROUP ='SIL' and JOB_SUB_GROUP ='SIL - QLGV'",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"dataset": {
-								"referenceName": "DS_DWH_SYNAPSE_STAGING",
-								"type": "DatasetReference",
-								"parameters": {
-									"TableName": "ADF.ETL_JOB"
-								}
-							},
-							"firstRowOnly": false
-						}
-					},
-					{
-						"name": "ForEach",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Lookup SRC List').output.value",
-								"type": "Expression"
-							},
-							"isSequential": true,
-							"activities": [
-								{
-									"name": "Set Source Script",
-									"type": "SetVariable",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Source_Script",
-										"value": {
-											"value": "@{Item().SRC_LIST}",
-											"type": "Expression"
-										}
-									}
-								},
-								{
-									"name": "SIL Store Procedure",
-									"type": "SqlServerStoredProcedure",
-									"dependsOn": [
-										{
-											"activity": "Set Target Table",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"storedProcedureName": {
-											"value": "@variables('Source_Script')",
-											"type": "Expression"
-										},
-										"storedProcedureParameters": {
-											"p_batch_id": {
-												"value": {
-													"value": "@pipeline().parameters.BATCH_ID",
-													"type": "Expression"
-												},
-												"type": "Int64"
-											},
-											"p_target_table": {
-												"value": {
-													"value": "@variables('Target_Table')",
-													"type": "Expression"
-												},
-												"type": "String"
-											}
-										}
-									},
-									"linkedServiceName": {
-										"referenceName": "LS_DWH_SYNAPSE_DEV",
-										"type": "LinkedServiceReference"
-									}
-								},
-								{
-									"name": "Set Target Table",
-									"type": "SetVariable",
-									"dependsOn": [
-										{
-											"activity": "Set Source Script",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"userProperties": [],
-									"typeProperties": {
-										"variableName": "Target_Table",
-										"value": {
-											"value": "@{Item().TGT_TBL}",
-											"type": "Expression"
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "SEND EMAIL",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "SEND ERROR EMAIL",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"parameters": {
-					"BATCH_ID": {
-						"type": "string",
-						"defaultValue": "19000101"
-					},
-					"TGT_TABLE": {
-						"type": "string"
-					}
-				},
-				"variables": {
-					"Source_Script": {
-						"type": "String"
-					},
-					"Target_Table": {
-						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "VUS_ETL"
-				},
-				"annotations": [],
-				"lastPublishTime": "2022-05-29T07:58:30Z"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/VUS_SIL_GROUP_TQM 01')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -337,22 +144,54 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Target Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "SIL Store Procedure",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -365,7 +204,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -530,22 +374,54 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Target Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "SIL Store Procedure",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -558,7 +434,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -723,22 +604,54 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Target Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "SIL Store Procedure",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup SRC List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -751,7 +664,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -813,6 +731,43 @@
 					"table": {
 						"value": "@dataset().TABLE_NAME",
 						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/4AM')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PAUSE SYNAPSE",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2022-05-21T17:50:00",
+						"endTime": "2022-05-23T17:50:00",
+						"timeZone": "SE Asia Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								4
+							]
+						}
 					}
 				}
 			},
@@ -938,7 +893,7 @@
 						}
 					},
 					{
-						"name": "SEND ERROR MESAGE PLP",
+						"name": "SEND ERROR MESAGE PLP GROUP 00",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
@@ -946,25 +901,105 @@
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_PLP_GROUP_00').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE PLP GROUP 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_PLP_GROUP_01",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_PLP_GROUP_01').output.errors[0].Message\n",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE REBUILD INDEX",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "REBUILD INDEX",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('REBUILD INDEX').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE PLP GROUP 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_PLP_GROUP_02",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_PLP_GROUP_02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE PLP GROUP 03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_PLP_GROUP_03",
 								"dependencyConditions": [
@@ -979,7 +1014,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_PLP_GROUP_03').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -1466,22 +1506,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -1494,7 +1608,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -2000,22 +2119,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -2028,7 +2221,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -2534,22 +2732,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -2562,7 +2834,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -3062,22 +3339,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -3090,7 +3441,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -3597,22 +3953,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND ERROR MESSAGE CRM",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -3625,7 +4055,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -4131,22 +4566,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND ERROR MESSAGE QLGV",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -4159,7 +4668,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -4665,22 +5179,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -4693,7 +5281,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -5199,22 +5792,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -5227,7 +5894,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -5728,22 +6400,96 @@
 											"type": "Expression"
 										}
 									}
+								},
+								{
+									"name": "SEND ERROR MESSAGE",
+									"type": "ExecutePipeline",
+									"dependsOn": [
+										{
+											"activity": "Set TGT Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Get JOB_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set Source Script",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Table",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Set SRC Schema",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Before Load Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Copy data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Finish Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Insert Log Load Fail Data",
+											"dependencyConditions": [
+												"Failed"
+											]
+										},
+										{
+											"activity": "Update Batch_ID",
+											"dependencyConditions": [
+												"Failed"
+											]
+										}
+									],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "SEND ERROR EMAIL",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"ErrorMessage": {
+												"value": "@item().errors[0].Message",
+												"type": "Expression"
+											}
+										}
+									}
 								}
 							]
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
 								"activity": "Lookup_SRC_List",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "ForEach",
 								"dependencyConditions": [
 									"Failed"
 								]
@@ -5756,7 +6502,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -5910,7 +6661,7 @@
 						}
 					},
 					{
-						"name": "SEND ERROR MESSAGE SIL",
+						"name": "SEND ERROR MESAGE SIL GROUP QLGV",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
@@ -5918,31 +6669,131 @@
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_QLGV').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP CRM",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_CRM",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_CRM').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA 01",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP TQM 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_TQM 01",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_TQM 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA 02",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA 03",
 								"dependencyConditions": [
@@ -5957,7 +6808,38 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 03').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP TQM 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SIL_GROUP_TQM 02",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_TQM 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -5979,7 +6861,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GROUP_TQM 01')]",
-				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GROUP_QLGV')]",
 				"[concat(variables('factoryId'), '/pipelines/VUS_SIL_GROUP_TQM 02')]"
 			]
 		},
@@ -6032,7 +6913,7 @@
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 01",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
@@ -6040,13 +6921,53 @@
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA 02",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SIL GROUP ASA 03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA 03",
 								"dependencyConditions": [
@@ -6061,7 +6982,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA 03').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -6125,7 +7051,7 @@
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESSAGE VUS_SDE_GROUP_ASA",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
@@ -6133,7 +7059,27 @@
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESSAGE VUS_SIL_GROUP_ASA",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SIL_GROUP_ASA",
 								"dependencyConditions": [
@@ -6148,7 +7094,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SIL_GROUP_ASA').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -6278,7 +7229,7 @@
 						}
 					},
 					{
-						"name": "SEND ERROR MESSAGE SDE",
+						"name": "SEND ERROR MESAGE SDE GROUP QLGV",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
@@ -6286,37 +7237,157 @@
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_QLGV').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP CRM",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_CRM",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_CRM').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP ASA_03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_ASA 03",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP TQM 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_TQM 01",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_TQM 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP ASA 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_ASA 01",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP ASA 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_ASA 02",
 								"dependencyConditions": [
 									"Failed"
 								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
 							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP TQM 02",
+						"type": "ExecutePipeline",
+						"dependsOn": [
 							{
 								"activity": "VUS_SDE_GROUP_TQM 02",
 								"dependencyConditions": [
@@ -6331,7 +7402,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_TQM 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
@@ -6409,21 +7485,9 @@
 						}
 					},
 					{
-						"name": "SEND EMAIL",
+						"name": "SEND ERROR MESAGE SDE GROUP ASA 02",
 						"type": "ExecutePipeline",
 						"dependsOn": [
-							{
-								"activity": "VUS_SDE_GROUP_ASA 03",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "VUS_SDE_GROUP_ASA 01",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
 							{
 								"activity": "VUS_SDE_GROUP_ASA 02",
 								"dependencyConditions": [
@@ -6438,7 +7502,64 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP ASA 01",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SDE_GROUP_ASA 01",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "SEND ERROR MESAGE SDE GROUP ASA_03",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "VUS_SDE_GROUP_ASA 03",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "SEND ERROR EMAIL",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"ErrorMessage": {
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
