@@ -59,7 +59,7 @@
 				]
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE RLS",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -75,7 +75,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Load RLS Config').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
