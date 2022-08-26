@@ -154,7 +154,7 @@
 								"waitOnCompletion": true,
 								"parameters": {
 									"ErrorMessage": {
-										"value": "@item().errors[0].Message",
+										"value": "@item().Error.message",
 										"type": "Expression"
 									}
 								}
