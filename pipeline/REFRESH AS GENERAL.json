@@ -536,6 +536,344 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Start AS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Start AS",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Start AS').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G0",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G0",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G0').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G0",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G0",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G0').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G1').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G1').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G2",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G2').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G2",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G2').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G3",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G3').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G3",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G3').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G4",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G4",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G4').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G3_copy1",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G4",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G4').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Get List Refresh_G5",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get List Refresh_G5",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get List Refresh_G5').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE Refresh AS_G5",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Refresh AS_G5",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Refresh AS_G5').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"variables": {
