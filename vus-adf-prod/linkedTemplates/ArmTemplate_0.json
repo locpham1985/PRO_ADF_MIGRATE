@@ -1320,7 +1320,7 @@
 				"parameters": {
 					"databases": {
 						"type": "string",
-						"defaultValue": "VUSDWHDEV"
+						"defaultValue": "VUSDWHPRO"
 					},
 					"Subscriptions": {
 						"type": "string",
@@ -1328,11 +1328,11 @@
 					},
 					"ResourceGroups": {
 						"type": "string",
-						"defaultValue": "DWCLOUD-DEV"
+						"defaultValue": "DWCLOUD-Prod"
 					},
 					"Servers": {
 						"type": "string",
-						"defaultValue": "vus-synapse-ws"
+						"defaultValue": "vus-synapseprod-ws"
 					}
 				},
 				"folder": {

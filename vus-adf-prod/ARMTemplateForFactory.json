@@ -292,7 +292,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"databases": "VUSDWHPRO",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-Prod",
+								"Servers": "vus-synapseprod-ws"
+							}
 						}
 					},
 					{
@@ -4298,7 +4303,7 @@
 				"parameters": {
 					"databases": {
 						"type": "string",
-						"defaultValue": "VUSDWHDEV"
+						"defaultValue": "VUSDWHPRO"
 					},
 					"Subscriptions": {
 						"type": "string",
@@ -4306,11 +4311,11 @@
 					},
 					"ResourceGroups": {
 						"type": "string",
-						"defaultValue": "DWCLOUD-DEV"
+						"defaultValue": "DWCLOUD-Prod"
 					},
 					"Servers": {
 						"type": "string",
-						"defaultValue": "vus-synapse-ws"
+						"defaultValue": "vus-synapseprod-ws"
 					}
 				},
 				"folder": {
