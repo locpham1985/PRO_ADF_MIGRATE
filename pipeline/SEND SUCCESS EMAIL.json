@@ -43,7 +43,7 @@
 			},
 			"ErrorMessage": {
 				"type": "string",
-				"defaultValue": "Error"
+				"defaultValue": "Done !"
 			},
 			"PipelineName": {
 				"type": "string",
