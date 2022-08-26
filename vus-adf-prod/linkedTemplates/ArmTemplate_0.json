@@ -137,11 +137,11 @@
 				"parameters": {
 					"Title": {
 						"type": "string",
-						"defaultValue": "[[The etl success]"
+						"defaultValue": "[The etl success] "
 					},
 					"DataFactoryName": {
 						"type": "string",
-						"defaultValue": "@pipeline().DataFactory"
+						"defaultValue": "VUS-ADF-PROD"
 					},
 					"EmailTo": {
 						"type": "string",
