@@ -111,7 +111,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+							"value": "@activity('Get Azure Synapse State').Error.message",
 							"type": "Expression"
 						}
 					}
