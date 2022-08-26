@@ -112,7 +112,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESAGE PLP",
+				"name": "SEND ERROR MESAGE PLP GROUP 00",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -120,25 +120,105 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP_GROUP_00').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE PLP GROUP 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_PLP_GROUP_01",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP_GROUP_01').output.errors[0].Message\n",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE REBUILD INDEX",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "REBUILD INDEX",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('REBUILD INDEX').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE PLP GROUP 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_PLP_GROUP_02",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP_GROUP_02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE PLP GROUP 03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_PLP_GROUP_03",
 						"dependencyConditions": [
@@ -152,7 +232,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP_GROUP_03').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
