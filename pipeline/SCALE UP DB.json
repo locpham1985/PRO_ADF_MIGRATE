@@ -53,7 +53,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SCALE DB').output.errors[0].Message",
+							"value": "@activity('SCALE DB').Error.message",
 							"type": "Expression"
 						}
 					}
