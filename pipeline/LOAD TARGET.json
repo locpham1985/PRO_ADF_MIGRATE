@@ -83,7 +83,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Load Target').output.errors[0].Message",
+							"value": "@activity('Load Target').Error.message",
 							"type": "Expression"
 						}
 					}
