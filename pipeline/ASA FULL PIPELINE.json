@@ -312,7 +312,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('START SYNAPSE').output.errors[0].Message",
+							"value": "@activity('START SYNAPSE').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -338,7 +338,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SCALE UP DB').output.errors[0].Message",
+							"value": "@activity('SCALE UP DB').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -364,7 +364,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('START BATCH').output.errors[0].Message",
+							"value": "@activity('START BATCH').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -390,7 +390,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_ASA').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_ASA').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -416,7 +416,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SIL_ASA').output.errors[0].Message",
+							"value": "@activity('VUS_SIL_ASA').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -442,7 +442,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP').output.errors[0].Message",
+							"value": "@activity('VUS_PLP').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -468,7 +468,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('END BATCH').output.errors[0].Message",
+							"value": "@activity('END BATCH').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -494,7 +494,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('REFRESH AS').output.errors[0].Message",
+							"value": "@activity('REFRESH AS').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -520,7 +520,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SCALE DOWN DB').output.errors[0].Message",
+							"value": "@activity('SCALE DOWN DB').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -546,7 +546,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('PAUSE SYNAPSE').output.errors[0].Message",
+							"value": "@activity('PAUSE SYNAPSE').Error.message",
 							"type": "Expression"
 						}
 					}
