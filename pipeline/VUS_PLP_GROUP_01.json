@@ -167,6 +167,9 @@
 			},
 			"Target_Table": {
 				"type": "String"
+			},
+			"Error_Message": {
+				"type": "String"
 			}
 		},
 		"folder": {
