@@ -123,7 +123,7 @@
 							}
 						},
 						{
-							"name": "SEND ERROR MESSAGE LOOKUP SRC LIST_copy1",
+							"name": "SEND ERROR MESSAGE",
 							"type": "ExecutePipeline",
 							"dependsOn": [
 								{
@@ -184,6 +184,32 @@
 					"parameters": {
 						"ErrorMessage": {
 							"value": "@activity('Lookup SRC List').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE LOOKUP SRC LIST FOR EACH",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ForEach",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@item().errors[0].Message",
 							"type": "Expression"
 						}
 					}
