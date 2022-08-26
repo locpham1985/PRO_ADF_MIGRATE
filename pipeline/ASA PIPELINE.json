@@ -36,7 +36,7 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE VUS_SDE_GROUP_ASA",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -44,7 +44,27 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SDE_GROUP_ASA').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE VUS_SIL_GROUP_ASA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA",
 						"dependencyConditions": [
@@ -58,7 +78,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
