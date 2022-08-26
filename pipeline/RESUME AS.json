@@ -117,6 +117,32 @@
 					],
 					"timeout": "7.00:00:00"
 				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE CheckIfAzureASSuspended",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CheckIfAzureASSuspended",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('CheckIfAzureASSuspended').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
