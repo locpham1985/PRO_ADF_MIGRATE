@@ -131,7 +131,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP_GROUP_00').output.errors[0].Message",
+							"value": "@activity('VUS_PLP_GROUP_00').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -157,7 +157,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP_GROUP_01').output.errors[0].Message\n",
+							"value": "@activity('VUS_PLP_GROUP_01').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -183,7 +183,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('REBUILD INDEX').output.errors[0].Message",
+							"value": "@activity('REBUILD INDEX').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -209,7 +209,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP_GROUP_02').output.errors[0].Message",
+							"value": "@activity('VUS_PLP_GROUP_02').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -235,7 +235,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP_GROUP_03').output.errors[0].Message",
+							"value": "@activity('VUS_PLP_GROUP_03').Error.message",
 							"type": "Expression"
 						}
 					}
