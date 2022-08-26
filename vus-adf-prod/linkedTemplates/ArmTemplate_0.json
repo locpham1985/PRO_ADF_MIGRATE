@@ -359,7 +359,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"value": "@activity('Get Azure Synapse State').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -677,7 +677,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Login').output.errors[0].Message",
+									"value": "@activity('Login').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -703,7 +703,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('StartProcessingAzureAS').output.errors[0].Message",
+									"value": "@activity('StartProcessingAzureAS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -729,7 +729,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('GetAzureASRefreshes').output.errors[0].Message",
+									"value": "@activity('GetAzureASRefreshes').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -755,7 +755,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('FilterToCurrentRefresh').output.errors[0].Message",
+									"value": "@activity('FilterToCurrentRefresh').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -958,7 +958,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('CheckIfAzureASSuspended').output.errors[0].Message",
+									"value": "@activity('CheckIfAzureASSuspended').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1114,7 +1114,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"value": "@activity('Get Azure Synapse State').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1210,7 +1210,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"value": "@activity('SCALE DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1306,7 +1306,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"value": "@activity('SCALE DB').Error.message",
 									"type": "Expression"
 								}
 							}

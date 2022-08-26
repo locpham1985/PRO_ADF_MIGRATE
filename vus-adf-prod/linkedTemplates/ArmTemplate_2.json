@@ -177,7 +177,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -206,7 +206,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -407,7 +407,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -436,7 +436,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -637,7 +637,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -666,7 +666,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -912,7 +912,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_00').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_00').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -938,7 +938,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_01').output.errors[0].Message\n",
+									"value": "@activity('VUS_PLP_GROUP_01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -964,7 +964,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('REBUILD INDEX').output.errors[0].Message",
+									"value": "@activity('REBUILD INDEX').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -990,7 +990,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_02').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_02').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1016,7 +1016,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_03').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_03').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1581,7 +1581,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -1610,7 +1610,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"value": "@activity('Lookup_SRC_List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3414,7 +3414,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -3443,7 +3443,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"value": "@activity('Lookup_SRC_List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7070,7 +7070,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7096,7 +7096,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SIL_GROUP_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SIL_GROUP_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7248,7 +7248,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_QLGV').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_QLGV').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7274,7 +7274,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_CRM').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_CRM').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7300,7 +7300,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7326,7 +7326,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_TQM 01').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_TQM 01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7504,7 +7504,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 02').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7530,7 +7530,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -7556,7 +7556,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 									"type": "Expression"
 								}
 							}

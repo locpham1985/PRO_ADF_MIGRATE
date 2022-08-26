@@ -357,7 +357,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('START SYNAPSE').output.errors[0].Message",
+									"value": "@activity('START SYNAPSE').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -383,7 +383,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE UP DB').output.errors[0].Message",
+									"value": "@activity('SCALE UP DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -409,7 +409,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('START BATCH').output.errors[0].Message",
+									"value": "@activity('START BATCH').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -435,7 +435,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -461,7 +461,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SIL_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SIL_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -487,7 +487,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP').output.errors[0].Message",
+									"value": "@activity('VUS_PLP').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -513,7 +513,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('END BATCH').output.errors[0].Message",
+									"value": "@activity('END BATCH').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -539,7 +539,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('REFRESH AS').output.errors[0].Message",
+									"value": "@activity('REFRESH AS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -565,7 +565,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE DOWN DB').output.errors[0].Message",
+									"value": "@activity('SCALE DOWN DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -591,7 +591,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('PAUSE SYNAPSE').output.errors[0].Message",
+									"value": "@activity('PAUSE SYNAPSE').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -696,7 +696,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -722,7 +722,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SIL_GROUP_ASA').output.errors[0].Message",
+									"value": "@activity('VUS_SIL_GROUP_ASA').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1332,7 +1332,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Load RLS Config').output.errors[0].Message",
+									"value": "@activity('Load RLS Config').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -1442,7 +1442,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Load Target').output.errors[0].Message",
+									"value": "@activity('Load Target').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2057,7 +2057,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('START SYNAPSE').output.errors[0].Message",
+									"value": "@activity('START SYNAPSE').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2083,7 +2083,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE UP DB').output.errors[0].Message",
+									"value": "@activity('SCALE UP DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2109,7 +2109,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE UP DB').output.errors[0].Message",
+									"value": "@activity('SCALE UP DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2135,7 +2135,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_ETL_MASTER').output.errors[0].Message",
+									"value": "@activity('VUS_ETL_MASTER').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2161,7 +2161,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('END BATCH').output.errors[0].Message",
+									"value": "@activity('END BATCH').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2187,7 +2187,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('REFRESH AS').output.errors[0].Message",
+									"value": "@activity('REFRESH AS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2213,7 +2213,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('REFRESH AS').output.errors[0].Message",
+									"value": "@activity('REFRESH AS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2239,7 +2239,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('PAUSE SYNAPSE').output.errors[0].Message",
+									"value": "@activity('PAUSE SYNAPSE').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -2419,7 +2419,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"value": "@activity('Get Azure Synapse State').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3020,7 +3020,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Start AS').output.errors[0].Message",
+									"value": "@activity('Start AS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3046,7 +3046,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G0').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G0').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3072,7 +3072,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G0').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G0').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3098,7 +3098,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G1').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G1').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3124,7 +3124,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G1').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G1').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3150,7 +3150,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G2').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G2').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3176,7 +3176,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G2').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G2').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3202,7 +3202,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G3').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G3').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3228,7 +3228,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G3').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G3').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3254,7 +3254,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G4').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G4').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3280,7 +3280,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G4').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G4').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3306,7 +3306,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get List Refresh_G5').output.errors[0].Message",
+									"value": "@activity('Get List Refresh_G5').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3332,7 +3332,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Refresh AS_G5').output.errors[0].Message",
+									"value": "@activity('Refresh AS_G5').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3655,7 +3655,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Login').output.errors[0].Message",
+									"value": "@activity('Login').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3681,7 +3681,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('StartProcessingAzureAS').output.errors[0].Message",
+									"value": "@activity('StartProcessingAzureAS').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3707,7 +3707,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('GetAzureASRefreshes').output.errors[0].Message",
+									"value": "@activity('GetAzureASRefreshes').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3733,7 +3733,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('FilterToCurrentRefresh').output.errors[0].Message",
+									"value": "@activity('FilterToCurrentRefresh').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -3936,7 +3936,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('CheckIfAzureASSuspended').output.errors[0].Message",
+									"value": "@activity('CheckIfAzureASSuspended').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4092,7 +4092,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+									"value": "@activity('Get Azure Synapse State').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4188,7 +4188,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"value": "@activity('SCALE DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4284,7 +4284,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SCALE DB').output.errors[0].Message",
+									"value": "@activity('SCALE DB').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4576,7 +4576,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SDE').output.errors[0].Message",
+									"value": "@activity('SDE').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4602,7 +4602,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SIL').output.errors[0].Message",
+									"value": "@activity('SIL').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4628,7 +4628,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('SIL GENERAL').output.errors[0].Message",
+									"value": "@activity('SIL GENERAL').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4654,7 +4654,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP').output.errors[0].Message",
+									"value": "@activity('VUS_PLP').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4846,7 +4846,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_00').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_00').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4872,7 +4872,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_01').output.errors[0].Message\n",
+									"value": "@activity('VUS_PLP_GROUP_01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4898,7 +4898,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('REBUILD INDEX').output.errors[0].Message",
+									"value": "@activity('REBUILD INDEX').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4924,7 +4924,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_02').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_02').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -4950,7 +4950,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_PLP_GROUP_03').output.errors[0].Message",
+									"value": "@activity('VUS_PLP_GROUP_03').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -5140,7 +5140,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -5169,7 +5169,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -5367,7 +5367,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -5396,7 +5396,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -5597,7 +5597,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -5626,7 +5626,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -5824,7 +5824,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -5853,7 +5853,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6024,7 +6024,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_QLGV').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_QLGV').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6050,7 +6050,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_CRM').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_CRM').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6076,7 +6076,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6102,7 +6102,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_TQM 01').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_TQM 01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6281,7 +6281,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 02').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6307,7 +6307,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 01').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6333,7 +6333,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+									"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -6902,7 +6902,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -6931,7 +6931,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"value": "@activity('Lookup_SRC_List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -8750,7 +8750,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -8779,7 +8779,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+									"value": "@activity('Lookup_SRC_List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -13010,7 +13010,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -13039,7 +13039,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -13244,7 +13244,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -13273,7 +13273,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -13713,7 +13713,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -13742,7 +13742,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -13947,7 +13947,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -13976,7 +13976,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -14181,7 +14181,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -14210,7 +14210,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -14415,7 +14415,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -14444,7 +14444,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
@@ -14649,7 +14649,7 @@
 										"waitOnCompletion": true,
 										"parameters": {
 											"ErrorMessage": {
-												"value": "@item().errors[0].Message",
+												"value": "@item().Error.message",
 												"type": "Expression"
 											}
 										}
@@ -14678,7 +14678,7 @@
 							"waitOnCompletion": true,
 							"parameters": {
 								"ErrorMessage": {
-									"value": "@activity('Lookup SRC List').output.errors[0].Message",
+									"value": "@activity('Lookup SRC List').Error.message",
 									"type": "Expression"
 								}
 							}
