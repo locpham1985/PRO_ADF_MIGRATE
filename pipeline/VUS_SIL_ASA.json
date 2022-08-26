@@ -42,7 +42,7 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 01",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -50,13 +50,53 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 01').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA 02",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA 03",
 						"dependencyConditions": [
@@ -70,7 +110,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 03').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
