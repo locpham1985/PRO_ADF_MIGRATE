@@ -275,7 +275,13 @@
 						"referenceName": "SCALE DOWN DB",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"databases": "VUSDWHPRO",
+						"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+						"ResourceGroups": "DWCLOUD-Prod",
+						"Servers": "vus-synapseprod-ws"
+					}
 				}
 			},
 			{
