@@ -120,7 +120,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_QLGV').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_QLGV').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -146,7 +146,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_CRM').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_CRM').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -172,7 +172,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -198,7 +198,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_TQM 01').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_TQM 01').Error.message",
 							"type": "Expression"
 						}
 					}
