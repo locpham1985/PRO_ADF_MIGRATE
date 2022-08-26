@@ -456,22 +456,96 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "SEND ERROR MESSAGE",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Set TGT Table",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Get JOB_ID",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Set Source Script",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Set SRC Table",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Set SRC Schema",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Insert Log Before Load Data",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Copy data",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Insert Log Load Finish Data",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Insert Log Load Fail Data",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Update Batch_ID",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "SEND ERROR EMAIL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"ErrorMessage": {
+										"value": "@item().errors[0].Message",
+										"type": "Expression"
+									}
+								}
+							}
 						}
 					]
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE LOOKUP SRC LIST",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
 						"activity": "Lookup_SRC_List",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "ForEach",
 						"dependencyConditions": [
 							"Failed"
 						]
@@ -483,7 +557,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
