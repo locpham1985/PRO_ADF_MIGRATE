@@ -39,7 +39,7 @@
 			},
 			"EmailTo": {
 				"type": "string",
-				"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn"
+				"defaultValue": "nhely@vus-etsc.edu.vn;locpham@vus-etsc.edu.vn;tungnlx@vus-etsc.edu.vn"
 			},
 			"ErrorMessage": {
 				"type": "string",
