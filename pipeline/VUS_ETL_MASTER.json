@@ -88,7 +88,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESAGE ETL MASTER",
+				"name": "SEND ERROR MESAGE SDE",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -96,19 +96,79 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SDE').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "SIL",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SIL').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GENERAL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "SIL GENERAL",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SIL GENERAL').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE PLP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_PLP",
 						"dependencyConditions": [
@@ -122,7 +182,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
