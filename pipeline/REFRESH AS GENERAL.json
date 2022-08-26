@@ -557,7 +557,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Start AS').output.errors[0].Message",
+							"value": "@activity('Start AS').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -583,7 +583,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G0').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G0').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -609,7 +609,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G0').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G0').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -635,7 +635,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G1').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G1').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -661,7 +661,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G1').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G1').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -687,7 +687,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G2').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G2').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -713,7 +713,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G2').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G2').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -739,7 +739,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G3').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G3').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -765,7 +765,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G3').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G3').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -791,7 +791,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G4').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G4').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -817,7 +817,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G4').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G4').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -843,7 +843,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Get List Refresh_G5').output.errors[0].Message",
+							"value": "@activity('Get List Refresh_G5').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -869,7 +869,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Refresh AS_G5').output.errors[0].Message",
+							"value": "@activity('Refresh AS_G5').Error.message",
 							"type": "Expression"
 						}
 					}
