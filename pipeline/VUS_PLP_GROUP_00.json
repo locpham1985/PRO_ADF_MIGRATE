@@ -188,32 +188,6 @@
 						}
 					}
 				}
-			},
-			{
-				"name": "SEND ERROR MESSAGE LOOKUP SRC LIST FOR EACH",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "ForEach",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "SEND ERROR EMAIL",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true,
-					"parameters": {
-						"ErrorMessage": {
-							"value": "@item().errors[0].Message",
-							"type": "Expression"
-						}
-					}
-				}
 			}
 		],
 		"parameters": {
