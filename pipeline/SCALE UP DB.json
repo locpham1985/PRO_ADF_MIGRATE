@@ -34,7 +34,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESSAGE SCALE DB",
+				"name": "SEND ERROR MESSAGE SCALE UP DB",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
