@@ -107,7 +107,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SDE').output.errors[0].Message",
+							"value": "@activity('SDE').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -133,7 +133,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SIL').output.errors[0].Message",
+							"value": "@activity('SIL').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -159,7 +159,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('SIL GENERAL').output.errors[0].Message",
+							"value": "@activity('SIL GENERAL').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -185,7 +185,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_PLP').output.errors[0].Message",
+							"value": "@activity('VUS_PLP').Error.message",
 							"type": "Expression"
 						}
 					}
