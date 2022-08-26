@@ -78,7 +78,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Load RLS Config').output.errors[0].Message",
+							"value": "@activity('Load RLS Config').Error.message",
 							"type": "Expression"
 						}
 					}
