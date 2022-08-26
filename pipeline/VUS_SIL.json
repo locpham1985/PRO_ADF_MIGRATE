@@ -250,7 +250,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+							"value": "@activity('VUS_SIL_GROUP_ASA 03').output.errors[0].Message",
 							"type": "Expression"
 						}
 					}
