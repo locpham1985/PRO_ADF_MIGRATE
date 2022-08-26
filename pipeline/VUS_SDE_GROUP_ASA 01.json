@@ -536,7 +536,7 @@
 								"waitOnCompletion": true,
 								"parameters": {
 									"ErrorMessage": {
-										"value": "@item().errors[0].Message",
+										"value": "@item().Error.message",
 										"type": "Expression"
 									}
 								}
@@ -565,7 +565,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Lookup_SRC_List').output.errors[0].Message",
+							"value": "@activity('Lookup_SRC_List').Error.message",
 							"type": "Expression"
 						}
 					}
