@@ -273,92 +273,6 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESSAGE",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "START SYNAPSE",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "SCALE UP DB",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "SET START BATCH TIME",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "START BATCH",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "GET BATCH_ID",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "VUS_SDE_ASA",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "VUS_SIL_ASA",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "VUS_PLP",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "END BATCH",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "REFRESH AS",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "SCALE DOWN DB",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "PAUSE SYNAPSE",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "SEND ERROR EMAIL",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
 				"name": "SEND SUCCESS EMAIL",
 				"type": "ExecutePipeline",
 				"dependsOn": [
@@ -376,6 +290,266 @@
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE START SYNAPSE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "START SYNAPSE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('START SYNAPSE').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE SCALE UP DB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SCALE UP DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SCALE UP DB').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE START BATCH",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "START BATCH",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('START BATCH').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE VUS_SDE_ASA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SDE_ASA",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SDE_ASA').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE VUS_SIL_ASA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SIL_ASA",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_ASA').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE VUS_PLP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_PLP",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_PLP').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE END BATCH",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "END BATCH",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('END BATCH').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE REFRESH AS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH AS",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('REFRESH AS').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE SCALE DOWN DB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SCALE DOWN DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SCALE DOWN DB').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE PAUSE SYNAPSE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PAUSE SYNAPSE",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('PAUSE SYNAPSE').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
