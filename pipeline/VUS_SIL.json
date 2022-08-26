@@ -101,7 +101,7 @@
 				}
 			},
 			{
-				"name": "SEND ERROR MESSAGE SIL",
+				"name": "SEND ERROR MESAGE SIL GROUP QLGV",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -109,31 +109,131 @@
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_QLGV').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP CRM",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_CRM",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_CRM').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA 01",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 01').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP TQM 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_TQM 01",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_TQM 01').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA 02",
 						"dependencyConditions": [
 							"Failed"
 						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
 					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP ASA 03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
 					{
 						"activity": "VUS_SIL_GROUP_ASA 03",
 						"dependencyConditions": [
@@ -147,7 +247,39 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_ASA 02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SIL GROUP TQM 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SIL_GROUP_TQM 02",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SIL_GROUP_TQM 02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
