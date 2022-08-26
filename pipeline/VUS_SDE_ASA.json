@@ -42,21 +42,9 @@
 				}
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESAGE SDE GROUP ASA 02",
 				"type": "ExecutePipeline",
 				"dependsOn": [
-					{
-						"activity": "VUS_SDE_GROUP_ASA 03",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "VUS_SDE_GROUP_ASA 01",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
 					{
 						"activity": "VUS_SDE_GROUP_ASA 02",
 						"dependencyConditions": [
@@ -70,7 +58,65 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SDE GROUP ASA 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SDE_GROUP_ASA 01",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SEND ERROR MESAGE SDE GROUP ASA_03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VUS_SDE_GROUP_ASA 03",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
