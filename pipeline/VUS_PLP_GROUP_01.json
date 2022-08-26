@@ -121,6 +121,44 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "SEND ERROR MESSAGE",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Set Source Script",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Set Target Table",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "SIL Store Procedure",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "SEND ERROR EMAIL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"ErrorMessage": {
+										"value": "@item().errors[0].Message",
+										"type": "Expression"
+									}
+								}
+							}
 						}
 					]
 				}
