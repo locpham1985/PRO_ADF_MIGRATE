@@ -90,6 +90,32 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE SYNAPSE STATE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Get Azure Synapse State",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Get Azure Synapse State').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
