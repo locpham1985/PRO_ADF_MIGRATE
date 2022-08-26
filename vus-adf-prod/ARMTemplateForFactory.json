@@ -208,7 +208,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"resourceGroups": "DWCLOUD-Prod",
+								"servers": "vus-synapseprod-ws",
+								"databases": "VUSDWHPRO"
+							}
 						}
 					},
 					{
@@ -318,7 +323,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"databases": "VUSDWHPRO",
+								"Subscriptions": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroups": "DWCLOUD-Prod",
+								"Servers": "vus-synapseprod-ws"
+							}
 						}
 					},
 					{
@@ -2567,7 +2577,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"TenantID": "d1005fc5-bff9-42d5-81e5-1f3fcb089799",
+								"SubscriptionID": "d607421b-81ca-426a-8942-2fd12f5c9611",
+								"ResourceGroup": "DWCLOUD-Prod",
+								"ServerName": "vusdwhasprod"
+							}
 						}
 					},
 					{
