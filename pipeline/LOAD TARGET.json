@@ -64,7 +64,7 @@
 				]
 			},
 			{
-				"name": "SEND EMAIL",
+				"name": "SEND ERROR MESSAGE LOAD TARGET",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
@@ -80,7 +80,13 @@
 						"referenceName": "SEND ERROR EMAIL",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('Load Target').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
