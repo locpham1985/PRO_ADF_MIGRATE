@@ -61,7 +61,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_ASA 02').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_ASA 02').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -87,7 +87,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_ASA 01').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_ASA 01').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -113,7 +113,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_ASA 03').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_ASA 03').Error.message",
 							"type": "Expression"
 						}
 					}
