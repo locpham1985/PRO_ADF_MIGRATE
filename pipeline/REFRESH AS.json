@@ -274,7 +274,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Login').output.errors[0].Message",
+							"value": "@activity('Login').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -300,7 +300,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('StartProcessingAzureAS').output.errors[0].Message",
+							"value": "@activity('StartProcessingAzureAS').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -326,7 +326,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('GetAzureASRefreshes').output.errors[0].Message",
+							"value": "@activity('GetAzureASRefreshes').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -352,7 +352,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('FilterToCurrentRefresh').output.errors[0].Message",
+							"value": "@activity('FilterToCurrentRefresh').Error.message",
 							"type": "Expression"
 						}
 					}
