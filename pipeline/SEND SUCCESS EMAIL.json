@@ -31,7 +31,7 @@
 		"parameters": {
 			"Title": {
 				"type": "string",
-				"defaultValue": "[The etl success]"
+				"defaultValue": "[The etl success] "
 			},
 			"DataFactoryName": {
 				"type": "string",
