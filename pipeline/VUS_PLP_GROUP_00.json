@@ -183,7 +183,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('Lookup SRC List').output.errors[0].Message",
+							"value": "@activity('Lookup SRC List').Error.message",
 							"type": "Expression"
 						}
 					}
