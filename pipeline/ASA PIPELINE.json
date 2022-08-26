@@ -55,7 +55,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SDE_GROUP_ASA').output.errors[0].Message",
+							"value": "@activity('VUS_SDE_GROUP_ASA').Error.message",
 							"type": "Expression"
 						}
 					}
@@ -81,7 +81,7 @@
 					"waitOnCompletion": true,
 					"parameters": {
 						"ErrorMessage": {
-							"value": "@activity('VUS_SIL_GROUP_ASA').output.errors[0].Message",
+							"value": "@activity('VUS_SIL_GROUP_ASA').Error.message",
 							"type": "Expression"
 						}
 					}
