@@ -32,6 +32,32 @@
 						"resource": "https://management.core.windows.net/"
 					}
 				}
+			},
+			{
+				"name": "SEND ERROR MESSAGE SCALE DOWN DB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SCALE DB",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SEND ERROR EMAIL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ErrorMessage": {
+							"value": "@activity('SCALE DB').output.errors[0].Message",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
