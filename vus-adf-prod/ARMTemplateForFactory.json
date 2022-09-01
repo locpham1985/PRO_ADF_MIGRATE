@@ -4364,7 +4364,7 @@
 						"type": "WebActivity",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "00:00:10",
+							"timeout": "00:00:30",
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
@@ -4396,7 +4396,7 @@
 					},
 					"DataFactoryName": {
 						"type": "string",
-						"defaultValue": "@pipeline().DataFactory"
+						"defaultValue": "VUS-ADF-PROD"
 					},
 					"EmailTo": {
 						"type": "string",
@@ -4434,7 +4434,7 @@
 						"type": "WebActivity",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "00:00:10",
+							"timeout": "00:00:30",
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
